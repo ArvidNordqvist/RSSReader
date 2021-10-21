@@ -4,7 +4,8 @@ using System.Text;
 
 namespace DataAccessLayer.Repositories
 {
-    interface PodRepository
+    public class PodRepository : IPodRepository
     {
+
     }
 }

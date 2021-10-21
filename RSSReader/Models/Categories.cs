@@ -6,6 +6,9 @@ namespace Models
 {
     public class Categories
     {
+        public Categories()
+        {
 
+        }
     }
 }

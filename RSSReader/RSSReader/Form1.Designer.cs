@@ -227,6 +227,7 @@ namespace RSSReader
             this.CreateCategoryTextBox.Location = new System.Drawing.Point(577, 178);
             this.CreateCategoryTextBox.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.CreateCategoryTextBox.Name = "CreateCategoryTextBox";
+            this.CreateCategoryTextBox.PlaceholderText = "Name here...";
             this.CreateCategoryTextBox.Size = new System.Drawing.Size(408, 23);
             this.CreateCategoryTextBox.TabIndex = 13;
             // 
@@ -248,6 +249,7 @@ namespace RSSReader
             this.NewCategoryButton.TabIndex = 15;
             this.NewCategoryButton.Text = "New";
             this.NewCategoryButton.UseVisualStyleBackColor = true;
+            this.NewCategoryButton.Click += new System.EventHandler(this.NewCategoryButton_Click);
             // 
             // SaveCategoryButton
             // 
