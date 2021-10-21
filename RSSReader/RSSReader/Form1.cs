@@ -8,14 +8,17 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Models;
+using BusinessLayer.Controllers;
 
 namespace RSSReader
 {
     public partial class Form1 : Form
     {
+        CategoryController categoryController;
         public Form1()
         {
             InitializeComponent();
+            categoryController = new CategoryController();
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -45,7 +48,7 @@ namespace RSSReader
 
         private void NewCategoryButton_Click(object sender, EventArgs e)
         {
-
+            categoryController.CreateCategory(CreateCategoryTextBox.Text);
         }
     }
 }

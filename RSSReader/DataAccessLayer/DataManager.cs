@@ -3,18 +3,17 @@ using Models;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Text;
 using System.Xml.Serialization;
 
 namespace DataAccessLayer
 {
-    internal class DataManager<T>
+    internal class DataManager
     {
-        public void Serialize(List<T> list)
+        public void Serialize(List<Categories> list)
         {
             try
             {
-                XmlSerializer xmlSerializer = new XmlSerializer(typeof(List<T>));
+                XmlSerializer xmlSerializer = new XmlSerializer(typeof(List<Categories>));
                 using FileStream outFile = new FileStream("Data.xml", FileMode.Create,
                     FileAccess.Write);
                 xmlSerializer.Serialize(outFile, list);
@@ -25,14 +24,14 @@ namespace DataAccessLayer
             }
         }
 
-        public List<T> Deserialize()
+        public List<Categories> Deserialize()
         {
             try
             {
-                XmlSerializer xmlSerializer = new XmlSerializer(typeof(List<T>));
+                XmlSerializer xmlSerializer = new XmlSerializer(typeof(List<Categories>));
                 using FileStream inFile = new FileStream("Data.xml", FileMode.Open,
                     FileAccess.Read);
-                return (List<T>)xmlSerializer.Deserialize(inFile);
+                return (List<Categories>)xmlSerializer.Deserialize(inFile);
             }
             catch (Exception e)
             {

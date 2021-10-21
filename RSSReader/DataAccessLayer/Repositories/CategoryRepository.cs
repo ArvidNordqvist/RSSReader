@@ -8,9 +8,8 @@ namespace DataAccessLayer.Repositories
     public class CategoryRepository : IRepository<Categories>
     {
 
-        private DataManager<Categories> dataManager;
-
-        List<Categories> categories;
+        private DataManager dataManager;
+        List<Categories> categories = new List<Categories>();
         public void create(Categories entity)
         {
             categories.Add(entity);
@@ -20,7 +19,6 @@ namespace DataAccessLayer.Repositories
         
         public Categories FindByID(int id)
         {
-
             return categories[id];
         }
         public void Update(int index, Categories entity)
