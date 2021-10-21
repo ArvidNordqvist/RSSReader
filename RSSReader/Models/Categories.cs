@@ -4,7 +4,8 @@ using System.Text;
 
 namespace Models
 {
-    class Pod
+    public class Categories
     {
+
     }
 }

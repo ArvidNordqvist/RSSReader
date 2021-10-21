@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Models
 {
-    class Catogories
+    class Episode
     {
     }
 }
