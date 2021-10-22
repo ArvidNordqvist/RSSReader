@@ -9,8 +9,16 @@ namespace DataAccessLayer.Repositories
     {
 
         private DataManager dataManager;
-        List<Categories> categories = new List<Categories>();
-        public void create(Categories entity)
+
+        List<Categories> categories;
+
+        public CategoryRepository()
+        {
+            dataManager = new DataManager();
+            categories = new List<Categories>();
+        }
+
+        public void Create(Categories entity)
         {
             categories.Add(entity);
             SaveChanges();

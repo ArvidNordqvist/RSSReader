@@ -5,14 +5,15 @@ using System.Xml.Serialization;
 
 namespace Models
 {
+    [Serializable]
     [XmlInclude(typeof(Categories))]
     public class Categories
     {
 
-        public string name { get; set; }
+        public string Name { get; set; }
         public Categories(string name)
         {
-            this.name = name;
+            Name = name;
         }
     }
 }

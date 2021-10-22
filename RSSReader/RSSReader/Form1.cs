@@ -48,7 +48,14 @@ namespace RSSReader
 
         private void NewCategoryButton_Click(object sender, EventArgs e)
         {
-            categoryController.CreateCategory(CreateCategoryTextBox.Text);
+            if(CreateCategoryTextBox.TextLength >= 3)
+            {
+                categoryController.CreateCategory(CreateCategoryTextBox.Text);
+            }
+            else
+            {
+                CreateCategoryTextBox.PlaceholderText = "Please type a name";
+            }
         }
     }
 }

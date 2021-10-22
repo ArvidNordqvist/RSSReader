@@ -18,7 +18,7 @@ namespace BusinessLayer.Controllers
         {
             Categories newCategory = new Categories(name);
 
-            categoryRepository.create(newCategory);
+            categoryRepository.Create(newCategory);
         }
 
         //public List<Podd> GetAllPodds()
