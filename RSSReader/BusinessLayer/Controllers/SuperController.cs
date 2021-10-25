@@ -6,11 +6,11 @@ using Models;
 
 namespace BusinessLayer.Controllers
 {
-    public class CategoryController
+    public class SuperController
     {
         IRepository<Categories> categoryRepository;
 
-        public CategoryController()
+        public SuperController()
         {
             categoryRepository = new CategoryRepository();
         }

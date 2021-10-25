@@ -14,11 +14,11 @@ namespace RSSReader
 {
     public partial class Form1 : Form
     {
-        CategoryController categoryController;
+        SuperController categoryController;
         public Form1()
         {
             InitializeComponent();
-            categoryController = new CategoryController();
+            categoryController = new SuperController();
         }
 
         private void Form1_Load(object sender, EventArgs e)
