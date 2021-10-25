@@ -6,14 +6,14 @@ using System.Xml.Serialization;
 namespace Models
 {
     [Serializable]
-    [XmlInclude(typeof(Categories))]
-    public class Categories
+    public class Categories : Super
     {
 
-        public string Name { get; set; }
-        public Categories(string name)
+        
+        public Categories(string name) 
+            : base(name)
         {
-            Name = name;
+            
         }
     }
 }
