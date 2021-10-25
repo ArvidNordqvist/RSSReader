@@ -14,11 +14,11 @@ namespace RSSReader
 {
     public partial class Form1 : Form
     {
-        SuperController categoryController;
+        SuperController superController;
         public Form1()
         {
             InitializeComponent();
-            categoryController = new SuperController();
+            superController = new SuperController();
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -48,14 +48,25 @@ namespace RSSReader
 
         private void NewCategoryButton_Click(object sender, EventArgs e)
         {
-            if(CreateCategoryTextBox.TextLength >= 3)
+            if (CreateCategoryTextBox.TextLength >= 3)
             {
-                categoryController.CreateCategory(CreateCategoryTextBox.Text);
+                superController.CreateCategory(CreateCategoryTextBox.Text);
             }
             else
             {
                 CreateCategoryTextBox.PlaceholderText = "Please type a name";
             }
+
+            List<Categories> cat = superController.getCategory();
+            foreach(Categories item in cat)
+            {
+                PlaceholderCategory.Items.Add(item);
+            }
+        }
+
+        private void PlaceholderCategory_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
         }
     }
 }

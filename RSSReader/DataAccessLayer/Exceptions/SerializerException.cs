@@ -16,7 +16,7 @@ namespace DataAccessLayer.Exceptions
         }
         public SerializerException(string fileName, string message) : base(message)
         {
-            this.fileName = fileName;
+             this.fileName = fileName;
         }
     }
 }
