@@ -8,17 +8,17 @@ namespace BusinessLayer.Controllers
 {
     public class SuperController
     {
-        IRepository<Super> categoryRepository;
+        IRepository<Super> SuperRepository;
 
         public SuperController()
         {
-            categoryRepository = new CategoryRepository();
+            SuperRepository = new SuperRepository();
         }
         public void CreateCategory(string name)
         {
             Categories newCategory = new Categories(name);
 
-            categoryRepository.Create(newCategory);
+            SuperRepository.Create(newCategory);
         }
 
         //public List<Podd> GetAllPodds()

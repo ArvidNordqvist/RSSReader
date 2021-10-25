@@ -9,33 +9,33 @@ namespace DataAccessLayer
 {
     internal class DataManager
     {
-        public void Serialize(List<Categories> list)
+        public void Serialize(List<Super> list)
         {
             try
             {
-                XmlSerializer xmlSerializer = new XmlSerializer(typeof(List<Categories>));
-                using FileStream outFile = new FileStream("Category.xml", FileMode.OpenOrCreate,
+                XmlSerializer xmlSerializer = new XmlSerializer(typeof(List<Super>));
+                using FileStream outFile = new FileStream("Super.xml", FileMode.OpenOrCreate,
                     FileAccess.Write);
                 xmlSerializer.Serialize(outFile, list);
             }
             catch (Exception e)
             {
-                throw new SerializerException("Category.xml", "Could not serialize to the xml-file");
+                throw new SerializerException("Super.xml", "Could not serialize to the xml-file");
             }
         }
 
-        public List<Categories> Deserialize()
+        public List<Super> Deserialize()
         {
             try
             {
-                XmlSerializer xmlSerializer = new XmlSerializer(typeof(List<Categories>));
-                using FileStream inFile = new FileStream("Category.xml", FileMode.Open,
+                XmlSerializer xmlSerializer = new XmlSerializer(typeof(List<Super>));
+                using FileStream inFile = new FileStream("Super.xml", FileMode.Open,
                     FileAccess.Read);
-                return (List<Categories>)xmlSerializer.Deserialize(inFile);
+                return (List<Super>)xmlSerializer.Deserialize(inFile);
             }
             catch (Exception e)
             {
-                throw new SerializerException("Category.xml", "Could not deserialize the xml-file.");
+                throw new SerializerException("Super.xml", "Could not deserialize the xml-file.");
             }
 
         }

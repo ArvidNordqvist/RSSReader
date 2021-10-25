@@ -5,42 +5,42 @@ using Models;
 
 namespace DataAccessLayer.Repositories
 {
-    public class CategoryRepository : IRepository<Categories>
+    public class SuperRepository : IRepository<Super>
     {
 
         private DataManager dataManager;
 
-        List<Categories> categories;
+        List<Super> Super;
 
-        public CategoryRepository()
+        public SuperRepository()
         {
             dataManager = new DataManager();
-            categories = new List<Categories>();
+            Super = new List<Super>();
         }
 
-        public void Create(Categories entity)
+        public void Create(Super entity)
         {
-            categories.Add(entity);
+            Super.Add(entity);
             SaveChanges();
         }
 
         
-        public Categories FindByID(int id)
+        public Super FindByID(int id)
         {
-            return categories[id];
+            return Super[id];
         }
-        public void Update(int index, Categories entity)
+        public void Update(int index, Super entity)
         {
-            if (index >= 0 && index < categories.Count - 1)
+            if (index >= 0 && index < Super.Count - 1)
             {
-                categories[index] = entity;
+                Super[index] = entity;
                 SaveChanges();
             }    
         }
         
-        public List<Categories> GetAll()
+        public List<Super> GetAll()
         {
-            List<Categories> tempCategories = new List<Categories>();
+            List<Super> tempCategories = new List<Super>();
             try
             {
                 tempCategories = dataManager.Deserialize();
@@ -53,12 +53,12 @@ namespace DataAccessLayer.Repositories
         }
         public void Delete(int index)
         {
-            categories.RemoveAt(index);
+            Super.RemoveAt(index);
             SaveChanges();
         }
         public void SaveChanges()
         {
-            dataManager.Serialize(categories);
+            dataManager.Serialize(Super);
         }
     }
 }
