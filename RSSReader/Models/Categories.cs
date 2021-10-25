@@ -5,7 +5,7 @@ using System.Xml.Serialization;
 
 namespace Models
 {
-    [Serializable]
+
     public class Categories : Super
     {
 

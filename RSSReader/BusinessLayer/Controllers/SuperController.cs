@@ -8,7 +8,7 @@ namespace BusinessLayer.Controllers
 {
     public class SuperController
     {
-        IRepository<Categories> categoryRepository;
+        IRepository<Super> categoryRepository;
 
         public SuperController()
         {
