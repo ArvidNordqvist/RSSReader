@@ -4,12 +4,14 @@ namespace Models
     public class Feed : Super
     {
         public String frekvens { get; set; }
-        public String description { get; set; }
-        public Feed(string name, string frekvens, string description) :
+        public String URL { get; set; }
+        public String category { get; set; }
+        public Feed(string name, string frekvens, string URL, string Category) :
                   base(name)
         {
             this.frekvens = frekvens;
-            this.description = description;
+            this.URL = URL;
+            category = Category;
         }
         private Feed()
         {

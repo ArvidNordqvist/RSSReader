@@ -172,6 +172,7 @@ namespace RSSReader
             this.NewPodButton.TabIndex = 7;
             this.NewPodButton.Text = "New";
             this.NewPodButton.UseVisualStyleBackColor = true;
+            this.NewPodButton.Click += new System.EventHandler(this.NewPodButton_Click);
             // 
             // SavePodButton
             // 
@@ -212,6 +213,7 @@ namespace RSSReader
             this.PlaceholderCategory.Name = "PlaceholderCategory";
             this.PlaceholderCategory.Size = new System.Drawing.Size(408, 124);
             this.PlaceholderCategory.TabIndex = 11;
+            this.PlaceholderCategory.SelectedIndexChanged += new System.EventHandler(this.PlaceholderCategory_SelectedIndexChanged);
             // 
             // CategoryListLabel
             // 
@@ -270,6 +272,7 @@ namespace RSSReader
             this.DeleteCategoryButton.TabIndex = 17;
             this.DeleteCategoryButton.Text = "Delete";
             this.DeleteCategoryButton.UseVisualStyleBackColor = true;
+            this.DeleteCategoryButton.Click += new System.EventHandler(this.DeleteCategoryButton_Click);
             // 
             // episodeDescriptionLabel
             // 

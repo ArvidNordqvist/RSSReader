@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using DataAccessLayer.Repositories;
 using Models;
+using System.Linq;
 
 namespace BusinessLayer.Controllers
 {
@@ -26,17 +27,19 @@ namespace BusinessLayer.Controllers
             return SuperRepository.GetAll();
         }
 
+
+
         //public string GetPoddDetailsByName(string name)
         //{
         //    //
         //    return SuperRepository.GetByName(name).Display()
         //}
 
-        //public void DeletePodd(string name)
-        //{
-        //    int index = SuperRepository.GetIndex(name);
-        //    SuperRepository.Delete(index);
-        //}
+        public void DeleteCategory(string name)
+        {
+            int index = SuperRepository.GetIndex(name);
+            SuperRepository.Delete(index);
+        }
 
         //public string GetPoddDetailsByAddress(string kategori)
         //{

@@ -9,6 +9,9 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using Models;
 using BusinessLayer.Controllers;
+using System.Net.Http;
+using System.Xml;
+using System.ServiceModel.Syndication;
 
 namespace RSSReader
 {
@@ -19,6 +22,7 @@ namespace RSSReader
         {
             InitializeComponent();
             categoryController = new SuperController();
+            FyllKategoriLista();
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -40,7 +44,7 @@ namespace RSSReader
         {
 
         }
-        private void lista()
+        private List<Super> lista()
         {
             List<Super> list = new List<Super>();
             list = categoryController.GetAllSuper();
@@ -48,6 +52,7 @@ namespace RSSReader
             {
                 Console.WriteLine(obj.Name);
             }
+            return list;
 
         }
         private void CategoryLabel_Click(object sender, EventArgs e)
@@ -61,7 +66,7 @@ namespace RSSReader
             if (CreateCategoryTextBox.TextLength >= 3)
             {
                 categoryController.CreateCategory(CreateCategoryTextBox.Text);
-                lista();
+                FyllKategoriLista();
             }
             else
             {
@@ -69,5 +74,56 @@ namespace RSSReader
                 Console.WriteLine("failed");
             }
         }
+
+        private void FyllKategoriLista()
+        {
+            List<Super> list = new List<Super>();
+            list = categoryController.GetAllSuper();
+            List<string> Category = new List<string>();
+            foreach (Categories obj in list)
+            {
+                Category.Add(obj.Name);
+            }
+            PlaceholderCategory.DataSource = Category;
+        }
+    
+
+        private void PlaceholderCategory_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void DeleteCategoryButton_Click(object sender, EventArgs e)
+        {
+          string category = PlaceholderCategory.GetItemText(PlaceholderCategory.SelectedItem);
+            categoryController.DeleteCategory(category);
+            FyllKategoriLista();
+        }
+
+        private void NewPodButton_Click(object sender, EventArgs e)
+        {
+            ParseRSSdotnet();
+        }
+        public void ParseRSSdotnet()
+        {
+            SyndicationFeed feed = null;
+
+            try
+            {
+                using (var reader = XmlReader.Create("https://visualstudiomagazine.com/rss-feeds/news.aspx"))
+                {
+                    feed = SyndicationFeed.Load(reader);
+                }
+            }
+            catch { } // TODO: Deal with unavailable resource.
+
+            if (feed != null)
+            {
+                foreach (var element in feed.Items)
+                {
+                    Console.WriteLine($"Title: {element.Title.Text}");
+                    Console.WriteLine($"Summary: {element.Summary.Text}");
+                }
+            }
+        }
     }
-}

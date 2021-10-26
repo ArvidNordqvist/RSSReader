@@ -12,5 +12,7 @@ namespace DataAccessLayer.Repositories
         void Delete(int index);
         void SaveChanges();
         List<T> GetAll();
+
+        public int GetIndex(String name);
     }
 }
