@@ -21,26 +21,26 @@ namespace BusinessLayer.Controllers
             SuperRepository.Create(newCategory);
         }
 
-        //public List<Podd> GetAllPodds()
-        //{
-        //    return poddRepository.GetAll();
-        //}
+        public List<Super> GetAllSuper()
+        {
+            return SuperRepository.GetAll();
+        }
 
         //public string GetPoddDetailsByName(string name)
         //{
         //    //
-        //    return poddRepository.GetByName(name).Display()
+        //    return SuperRepository.GetByName(name).Display()
         //}
 
         //public void DeletePodd(string name)
         //{
-        //    int index = poddRepository.GetIndex(name);
-        //    poddRepository.Delete(index);
+        //    int index = SuperRepository.GetIndex(name);
+        //    SuperRepository.Delete(index);
         //}
 
         //public string GetPoddDetailsByAddress(string kategori)
         //{
-        //    return poddRepository.GetByKategori(kategori).Display();
+        //    return SuperRepository.GetByKategori(kategori).Display();
         //}
     }
 }

@@ -1,20 +1,24 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
 namespace Models
 {
-    class Episode : Super
+    public class Episode : Super
     {
-        //description of the episode.
-        public string description { get; set; }
-        //Which podcast an episode belongs to.
-        public string podcast { get; set; }
-        public Episode(string name, string description, string podcast) 
-            : base(name)
+        public String pod;
+        public String description;
+        public Episode(string name, string description, String pod) :
+            base(name)
         {
             this.description = description;
-            this.podcast = podcast;
+            this.pod = pod;
         }
+        private Episode()
+        {
+        }
+        public override string Display()
+        {
+            return "I am an Episode. My name is " + Name + " and i belong to the pod " + pod;
+        }
+
+
     }
 }

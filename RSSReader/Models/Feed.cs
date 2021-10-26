@@ -1,20 +1,22 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
 namespace Models
 {
     public class Feed : Super
     {
-        //link to the podcastfeed
-        public string link { get; set; }
-        //which category the podcast belongs to
-        public string category { get; set; }
-        public Feed(string name, string link, string category) 
-            : base(name)
+        public String frekvens { get; set; }
+        public String description { get; set; }
+        public Feed(string name, string frekvens, string description) :
+                  base(name)
         {
-            this.link = link;
-            this.category = category;
+            this.frekvens = frekvens;
+            this.description = description;
+        }
+        private Feed()
+        {
+        }
+        public override string Display()
+        {
+            return "I am a Student. My name is " + Name + " and I live in ";
         }
     }
 }

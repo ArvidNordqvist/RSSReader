@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
-
-namespace DataAccessLayer.Exceptions
+namespace DataAccesLayer.Exceptions
 {
     public class SerializerException : Exception
     {

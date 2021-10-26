@@ -1,64 +1,79 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using DataAccesLayer;
 using Models;
+using System.Linq;
 
 namespace DataAccessLayer.Repositories
 {
-    public class SuperRepository : IRepository<Super>
+    public class SuperRepository : ISuperRepository<Super>
     {
 
-        private DataManager dataManager;
-
-        List<Super> Super;
-
+        
+        DataManager dataManager;
+        List<Super> listOfPersons;
         public SuperRepository()
         {
             dataManager = new DataManager();
-            Super = new List<Super>();
+            listOfPersons = new List<Super>();
+            listOfPersons = GetAll();
         }
-
         public void Create(Super entity)
         {
-            Super.Add(entity);
+            listOfPersons.Add(entity);
             SaveChanges();
         }
 
-        
-        public Super FindByID(int id)
+        public void Delete(int index)
         {
-            return Super[id];
+            listOfPersons.RemoveAt(index);
+            SaveChanges();
         }
-        public void Update(int index, Super entity)
-        {
-            if (index >= 0 && index < Super.Count - 1)
-            {
-                Super[index] = entity;
-                SaveChanges();
-            }    
-        }
-        
+
         public List<Super> GetAll()
         {
-            List<Super> tempCategories = new List<Super>();
+            List<Super> listOfPersonsDeserialized = new List<Super>();
             try
             {
-                tempCategories = dataManager.Deserialize();
+                listOfPersonsDeserialized = dataManager.Deserialize();
             }
             catch (Exception)
             {
-                
+
+
             }
-            return tempCategories;
+
+            return listOfPersonsDeserialized;
         }
-        public void Delete(int index)
-        {
-            Super.RemoveAt(index);
-            SaveChanges();
-        }
+
+
+
         public void SaveChanges()
         {
-            dataManager.Serialize(Super);
+            dataManager.Serialize(listOfPersons);
+        }
+
+        public void Update(int index, Super entity)
+        {
+            if (index >= 0)
+            {
+                listOfPersons[index] = entity;
+            }
+            SaveChanges();
+        }
+
+
+        public Super GetByName(string name)
+        {
+            return GetAll().FirstOrDefault(p => p.Name.Equals(name));
+        }
+
+
+
+        public int GetIndex(string name)
+        {
+            return GetAll().FindIndex(e => e.Name.Equals(name));
         }
     }
 }

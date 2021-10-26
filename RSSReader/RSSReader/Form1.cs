@@ -40,7 +40,16 @@ namespace RSSReader
         {
 
         }
+        private void lista()
+        {
+            List<Super> list = new List<Super>();
+            list = categoryController.GetAllSuper();
+            foreach (Super obj in list)
+            {
+                Console.WriteLine(obj.Name);
+            }
 
+        }
         private void CategoryLabel_Click(object sender, EventArgs e)
         {
 
@@ -48,13 +57,16 @@ namespace RSSReader
 
         private void NewCategoryButton_Click(object sender, EventArgs e)
         {
-            if(CreateCategoryTextBox.TextLength >= 3)
+            Console.WriteLine("Try");
+            if (CreateCategoryTextBox.TextLength >= 3)
             {
                 categoryController.CreateCategory(CreateCategoryTextBox.Text);
+                lista();
             }
             else
             {
                 CreateCategoryTextBox.PlaceholderText = "Please type a name";
+                Console.WriteLine("failed");
             }
         }
     }

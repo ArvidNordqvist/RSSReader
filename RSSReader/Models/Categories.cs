@@ -1,19 +1,19 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Xml.Serialization;
-
 namespace Models
 {
-
     public class Categories : Super
     {
 
-        
-        public Categories(string name) 
-            : base(name)
+        public Categories(String kategori) : base(kategori)
         {
-            
+
+        }
+        private Categories()
+        {
+        }
+        public override string Display()
+        {
+            return "I am an Employee. My name is " + Name + " and I live in ";
         }
     }
 }
