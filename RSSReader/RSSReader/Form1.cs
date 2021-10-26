@@ -23,12 +23,14 @@ namespace RSSReader
             InitializeComponent();
             categoryController = new SuperController();
             FyllKategoriLista();
+            FillCategoryComboBox();
         }
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            
+
         }
+
 
         private void label1_Click(object sender, EventArgs e)
         {
@@ -62,16 +64,17 @@ namespace RSSReader
 
         private void NewCategoryButton_Click(object sender, EventArgs e)
         {
-            Console.WriteLine("Try");
+            
             if (CreateCategoryTextBox.TextLength >= 3)
             {
                 categoryController.CreateCategory(CreateCategoryTextBox.Text);
                 FyllKategoriLista();
+                FillCategoryComboBox();
             }
             else
             {
                 CreateCategoryTextBox.PlaceholderText = "Please type a name";
-                Console.WriteLine("failed");
+                
             }
         }
 
@@ -79,14 +82,22 @@ namespace RSSReader
         {
             List<Super> list = new List<Super>();
             list = categoryController.GetAllSuper();
-            List<string> Category = new List<string>();
-            foreach (Categories obj in list)
-            {
-                Category.Add(obj.Name);
-            }
+            List<string> Category = (from Categories obj in list
+                                     select obj.Name).ToList();
             PlaceholderCategory.DataSource = Category;
         }
-    
+
+        private void FillCategoryComboBox()
+        {
+            List<Super> list = new List<Super>();
+            list = categoryController.GetAllSuper();
+            List<string> Category = (from Categories obj in list
+                                     select obj.Name).ToList();
+            foreach(string name in Category)
+            {
+                CategoryComboBox.Items.Add(name);
+            }
+        }
 
         private void PlaceholderCategory_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -95,35 +106,44 @@ namespace RSSReader
 
         private void DeleteCategoryButton_Click(object sender, EventArgs e)
         {
-          string category = PlaceholderCategory.GetItemText(PlaceholderCategory.SelectedItem);
+            string category = PlaceholderCategory.GetItemText(PlaceholderCategory.SelectedItem);
             categoryController.DeleteCategory(category);
             FyllKategoriLista();
+            FillCategoryComboBox();
         }
 
         private void NewPodButton_Click(object sender, EventArgs e)
         {
             ParseRSSdotnet();
         }
-        public void ParseRSSdotnet()
+        private void ParseRSSdotnet()
         {
             SyndicationFeed feed = null;
 
             try
             {
-                using (var reader = XmlReader.Create("https://visualstudiomagazine.com/rss-feeds/news.aspx"))
+                using (var reader = XmlReader.Create(URLTextBox.Text))
                 {
                     feed = SyndicationFeed.Load(reader);
                 }
             }
-            catch { } // TODO: Deal with unavailable resource.
+            catch
+            {
+            } // TODO: Deal with unavailable resource.
 
             if (feed != null)
             {
-                foreach (var element in feed.Items)
-                {
-                    Console.WriteLine($"Title: {element.Title.Text}");
-                    Console.WriteLine($"Summary: {element.Summary.Text}");
-                }
+                
+                    string episode = $"Episodes: {feed.Items.ToList().Count}";
+                    string title = NameTextBox.Text;
+                    dataGridView1.Rows.Add(episode, title, FrequencyComboBox.SelectedItem.ToString() ,CategoryComboBox.Text);
+                //Feed newFeed = new Feed(title, );
             }
         }
+
+        private void dataGridView1_RowHeaderMouseDoubleClick(object sender, DataGridViewCellMouseEventArgs e)
+        {
+
+        }
     }
+}
