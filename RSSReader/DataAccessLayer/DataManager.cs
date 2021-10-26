@@ -14,13 +14,13 @@ namespace DataAccessLayer
             try
             {
                 XmlSerializer xmlSerializer = new XmlSerializer(typeof(List<Super>));
-                using FileStream outFile = new FileStream("Super.xml", FileMode.OpenOrCreate,
+                using FileStream outFile = new FileStream("Main.xml", FileMode.Create,
                     FileAccess.Write);
-                xmlSerializer.Serialize(outFile, list);
+                xmlSerializer.Serialize(outFile, list.ToString());
             }
             catch (Exception e)
             {
-                throw new SerializerException("Super.xml", "Could not serialize to the xml-file");
+                throw new SerializerException("Main.xml", "Could not serialize to the xml-file");
             }
         }
 
@@ -29,13 +29,13 @@ namespace DataAccessLayer
             try
             {
                 XmlSerializer xmlSerializer = new XmlSerializer(typeof(List<Super>));
-                using FileStream inFile = new FileStream("Super.xml", FileMode.Open,
+                using FileStream inFile = new FileStream("Main.xml", FileMode.Open,
                     FileAccess.Read);
                 return (List<Super>)xmlSerializer.Deserialize(inFile);
             }
             catch (Exception e)
             {
-                throw new SerializerException("Super.xml", "Could not deserialize the xml-file.");
+                throw new SerializerException("Main.xml", "Could not deserialize the xml-file.");
             }
 
         }

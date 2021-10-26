@@ -21,6 +21,7 @@ namespace BusinessLayer.Controllers
         {
             Categories newCategory = new Categories(name);
             addCategory(newCategory);
+            SuperRepository.Create(newCategory);
         }
 
         public void addCategory(Categories newCategory)

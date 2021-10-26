@@ -57,16 +57,34 @@ namespace RSSReader
                 CreateCategoryTextBox.PlaceholderText = "Please type a name";
             }
 
-            List<Categories> cat = superController.getCategory();
-            foreach(Categories item in cat)
-            {
-                PlaceholderCategory.Items.Add(item);
-            }
+            showCategory();
+            CategoryDropdown();
         }
 
         private void PlaceholderCategory_SelectedIndexChanged(object sender, EventArgs e)
         {
 
+        }
+
+        private void showCategory()
+        {
+            List<Categories> cat = superController.getCategory();
+            PlaceholderCategory.Items.Clear();
+            foreach (Categories item in cat)
+            {
+                PlaceholderCategory.Items.Add(item.name.ToString());
+            }
+        }
+
+        private void CategoryDropdown()
+        {
+            CategoryComboBox.Items.Clear();
+            List<Categories> cat = superController.getCategory();
+            CategoryComboBox.Items.Clear();
+            foreach (Categories item in cat)
+            {
+                CategoryComboBox.Items.Add(item.name.ToString());
+            }
         }
     }
 }
