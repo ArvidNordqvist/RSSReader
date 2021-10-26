@@ -33,10 +33,10 @@ namespace DataAccessLayer.Repositories
 
         public List<Super> GetAll()
         {
-            List<Super> listOfPersonsDeserialized = new List<Super>();
+            List<Super> listOfSuperDeserialized = new List<Super>();
             try
             {
-                listOfPersonsDeserialized = dataManager.Deserialize();
+                listOfSuperDeserialized = dataManager.Deserialize();
             }
             catch (Exception)
             {
@@ -44,7 +44,7 @@ namespace DataAccessLayer.Repositories
 
             }
 
-            return listOfPersonsDeserialized;
+            return listOfSuperDeserialized;
         }
 
 
@@ -75,6 +75,14 @@ namespace DataAccessLayer.Repositories
         public int GetIndex(string name)
         {
             return GetAll().FindIndex(e => e.Name.Equals(name));
+        }
+
+        public List<Super> GetListOfSuperByCategory(string name)
+        {
+            List<Super> list = new List<Super>();
+            list = GetAll();
+            list.Find(x => x.PartName.Contains("seat")));
+            return GetAll().Contains()
         }
     }
 }

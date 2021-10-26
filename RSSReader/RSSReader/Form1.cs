@@ -86,7 +86,17 @@ namespace RSSReader
             }
             PlaceholderCategory.DataSource = Category;
         }
-    
+
+        private List<Feed> FeedListaByCategory(String kategori)
+        {
+            List<Super> list = new List<Super>();
+        list = categoryController.GetAllSuper();
+            return (from Feed obj in list
+                    where obj.category.Equals(kategori)
+                    select obj).ToList();
+        }
+
+
 
         private void PlaceholderCategory_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -126,4 +136,4 @@ namespace RSSReader
                 }
             }
         }
-    }
+    

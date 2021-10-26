@@ -16,7 +16,7 @@ namespace Models
         }
         public override string Display()
         {
-            return "I am an Episode. My name is " + Name + " and i belong to the pod " + pod;
+            return "This is an episode called " + Name + " and i belong to the pod " + pod;
         }
 
 
