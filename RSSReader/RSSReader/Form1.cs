@@ -64,7 +64,7 @@ namespace RSSReader
 
         private void NewCategoryButton_Click(object sender, EventArgs e)
         {
-            
+
             if (CreateCategoryTextBox.TextLength >= 3)
             {
                 categoryController.CreateCategory(CreateCategoryTextBox.Text);
@@ -74,7 +74,7 @@ namespace RSSReader
             else
             {
                 CreateCategoryTextBox.PlaceholderText = "Please type a name";
-                
+
             }
         }
 
@@ -98,6 +98,17 @@ namespace RSSReader
                 CategoryComboBox.Items.Add(name);
             }
         }
+
+        private List<Feed> FeedListaByCategory(String kategori)
+        {
+            List<Super> list = new List<Super>();
+        list = categoryController.GetAllSuper();
+            return (from Feed obj in list
+                    where obj.category.Equals(kategori)
+                    select obj).ToList();
+        }
+
+
 
         private void PlaceholderCategory_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -133,7 +144,7 @@ namespace RSSReader
 
             if (feed != null)
             {
-                
+
                     string episode = $"Episodes: {feed.Items.ToList().Count}";
                     string title = NameTextBox.Text;
                     dataGridView1.Rows.Add(episode, title, FrequencyComboBox.SelectedItem.ToString() ,CategoryComboBox.Text);

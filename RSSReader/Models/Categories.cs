@@ -13,7 +13,7 @@ namespace Models
         }
         public override string Display()
         {
-            return "I am an Employee. My name is " + Name + " and I live in ";
+            return "This is a category named: " + Name;
         }
     }
 }

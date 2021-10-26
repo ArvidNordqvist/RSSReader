@@ -39,6 +39,8 @@ namespace BusinessLayer.Controllers
         {
             int index = SuperRepository.GetIndex(name);
             SuperRepository.Delete(index);
+
+
         }
 
         //public string GetPoddDetailsByAddress(string kategori)

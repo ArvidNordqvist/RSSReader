@@ -18,7 +18,7 @@ namespace Models
         }
         public override string Display()
         {
-            return "I am a Student. My name is " + Name + " and I live in ";
+            return "This is a podcast caslled " + Name + " and I live in ";
         }
     }
 }
