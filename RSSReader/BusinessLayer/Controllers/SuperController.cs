@@ -43,7 +43,7 @@ namespace BusinessLayer.Controllers
 
         }
 
-        //public string GetPoddDetailsByAddress(string kategori)
+        //public string GetPoddDetailsByCategory(string kategori)
         //{
         //    return SuperRepository.GetByKategori(kategori).Display();
         //}

@@ -9,7 +9,7 @@ namespace DataAccessLayer
 {
     internal class DataManager
     {
-        public void Serialize(List<Super> personList)
+        public void Serialize(List<Super> inputList)
         {
             try
             {
@@ -17,7 +17,7 @@ namespace DataAccessLayer
                 using (FileStream outFile = new FileStream("oain.xml", FileMode.Create,
                     FileAccess.Write))
                 {
-                    xmlSerializer.Serialize(outFile, personList);
+                    xmlSerializer.Serialize(outFile, inputList);
                 }
             }
             catch (Exception e)

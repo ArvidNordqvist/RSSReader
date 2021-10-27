@@ -3,9 +3,9 @@ namespace Models
 {
     public class Episode : Super
     {
-        public String pod;
-        public String description;
-        public Episode(string name, string description, String pod) :
+        public string pod;
+        public string description;
+        public Episode(string name, string description, string pod) :
             base(name)
         {
             this.description = description;
@@ -16,7 +16,7 @@ namespace Models
         }
         public override string Display()
         {
-            return "This is an episode called " + Name + " and i belong to the pod " + pod;
+            return "This is an episode called " + Name + " and belong to the pod " + pod;
         }
 
 

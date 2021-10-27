@@ -3,9 +3,9 @@ namespace Models
 {
     public class Feed : Super
     {
-        public String frekvens { get; set; }
-        public String URL { get; set; }
-        public String category { get; set; }
+        public string frekvens { get; set; }
+        public string URL { get; set; }
+        public string category { get; set; }
         public Feed(string name, string frekvens, string URL, string Category) :
                   base(name)
         {
@@ -18,7 +18,7 @@ namespace Models
         }
         public override string Display()
         {
-            return "This is a podcast caslled " + Name + " and I live in ";
+            return "This is a podcast called " + Name + "!";
         }
     }
 }

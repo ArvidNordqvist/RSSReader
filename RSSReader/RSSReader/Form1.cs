@@ -31,7 +31,6 @@ namespace RSSReader
 
         }
 
-
         private void label1_Click(object sender, EventArgs e)
         {
 
@@ -64,24 +63,38 @@ namespace RSSReader
 
         private void NewCategoryButton_Click(object sender, EventArgs e)
         {
-
+            //checks so that the user is typing longer or 3 characters
             if (CreateCategoryTextBox.TextLength >= 3)
             {
+                //creates a Category
                 categoryController.CreateCategory(CreateCategoryTextBox.Text);
+                //fills the listbox
                 FyllKategoriLista();
+                //fills the combobox
                 FillCategoryComboBox();
             }
             else
             {
-                CreateCategoryTextBox.PlaceholderText = "Please type a name";
+                // Initializes the variables to pass to the MessageBox.Show method.
+                string message = "You did not enter 3 or more letters";
+                string caption = "Error Detected in Input";
+
+                // Displays the MessageBox.
+               MessageBox.Show(message, caption);
 
             }
         }
+
+        
+                
+          
+       
 
         private void FyllKategoriLista()
         {
             List<Super> list = new List<Super>();
             list = categoryController.GetAllSuper();
+            //LINQ query to retrieve all categories per name.
             List<string> Category = (from Categories obj in list
                                      select obj.Name).ToList();
             PlaceholderCategory.DataSource = Category;
@@ -89,11 +102,13 @@ namespace RSSReader
 
         private void FillCategoryComboBox()
         {
+            CategoryComboBox.Items.Clear();
             List<Super> list = new List<Super>();
             list = categoryController.GetAllSuper();
+            //LINQ query to retrieve all categories per name.
             List<string> Category = (from Categories obj in list
                                      select obj.Name).ToList();
-            foreach(string name in Category)
+            foreach (string name in Category)
             {
                 CategoryComboBox.Items.Add(name);
             }
@@ -102,13 +117,12 @@ namespace RSSReader
         private List<Feed> FeedListaByCategory(String kategori)
         {
             List<Super> list = new List<Super>();
-        list = categoryController.GetAllSuper();
+            list = categoryController.GetAllSuper();
+            //return a list of feeds depending on the Category searched
             return (from Feed obj in list
                     where obj.category.Equals(kategori)
                     select obj).ToList();
         }
-
-
 
         private void PlaceholderCategory_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -117,6 +131,7 @@ namespace RSSReader
 
         private void DeleteCategoryButton_Click(object sender, EventArgs e)
         {
+            //deletes the selected category and removes it from the xml file aswell as the list and combobox.
             string category = PlaceholderCategory.GetItemText(PlaceholderCategory.SelectedItem);
             categoryController.DeleteCategory(category);
             FyllKategoriLista();
@@ -125,6 +140,7 @@ namespace RSSReader
 
         private void NewPodButton_Click(object sender, EventArgs e)
         {
+            //RSS reader
             ParseRSSdotnet();
         }
         private void ParseRSSdotnet()
@@ -145,9 +161,9 @@ namespace RSSReader
             if (feed != null)
             {
 
-                    string episode = $"Episodes: {feed.Items.ToList().Count}";
-                    string title = NameTextBox.Text;
-                    dataGridView1.Rows.Add(episode, title, FrequencyComboBox.SelectedItem.ToString() ,CategoryComboBox.Text);
+                string episode = $"Episodes: {feed.Items.ToList().Count}";
+                string title = NameTextBox.Text;
+                dataGridView1.Rows.Add(episode, title, FrequencyComboBox.SelectedItem.ToString(), CategoryComboBox.Text);
                 //Feed newFeed = new Feed(title, );
             }
         }

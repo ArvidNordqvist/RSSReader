@@ -10,24 +10,24 @@ namespace DataAccessLayer.Repositories
     public class SuperRepository : ISuperRepository<Super>
     {
 
-        
+
         DataManager dataManager;
-        List<Super> listOfPersons;
+        List<Super> listOfSupers;
         public SuperRepository()
         {
             dataManager = new DataManager();
-            listOfPersons = new List<Super>();
-            listOfPersons = GetAll();
+            listOfSupers = new List<Super>();
+            listOfSupers = GetAll();
         }
         public void Create(Super entity)
         {
-            listOfPersons.Add(entity);
+            listOfSupers.Add(entity);
             SaveChanges();
         }
 
         public void Delete(int index)
         {
-            listOfPersons.RemoveAt(index);
+            listOfSupers.RemoveAt(index);
             SaveChanges();
         }
 
@@ -52,14 +52,14 @@ namespace DataAccessLayer.Repositories
 
         public void SaveChanges()
         {
-            dataManager.Serialize(listOfPersons);
+            dataManager.Serialize(listOfSupers);
         }
 
         public void Update(int index, Super entity)
         {
             if (index >= 0)
             {
-                listOfPersons[index] = entity;
+                listOfSupers[index] = entity;
             }
             SaveChanges();
         }
@@ -77,12 +77,12 @@ namespace DataAccessLayer.Repositories
             return GetAll().FindIndex(e => e.Name.Equals(name));
         }
 
-        public List<Super> GetListOfSuperByCategory(string name)
-        {
-            List<Super> list = new List<Super>();
-            list = GetAll();
-            list.Find(x => x.PartName.Contains("seat")));
-            return GetAll().Contains()
-        }
+        //public List<Super> GetListOfSuperByCategory(string name)
+        //{
+        //    List<Super> list = new List<Super>();
+        //    list = GetAll();
+        //    list.Find(x => x.PartName.Contains("seat")));
+        //    return GetAll().Contains();
+        //}
     }
 }
