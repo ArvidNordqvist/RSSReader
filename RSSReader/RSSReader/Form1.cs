@@ -168,6 +168,12 @@ namespace RSSReader
             SyndicationFeed feed = null;
             List<Feed> aList = new List<Feed>();
             aList = categoryController.Feedlist();
+            Console.WriteLine("hej");
+            foreach (Feed f in aList)
+            {
+                Console.WriteLine("hej");
+                Console.WriteLine(f.frekvens);
+            }
             foreach(Feed obj in aList)
             {
                 
@@ -186,7 +192,7 @@ namespace RSSReader
 
                     string episode = $"Episodes: {feed.Items.ToList().Count}";
                     string title = obj.Name;
-                    string frekvens =obj.frekvens;
+                    string frekvens = obj.frekvens;
                     string cat = obj.category;
                     dataGridView1.Rows.Add(episode, title, frekvens, cat);
 

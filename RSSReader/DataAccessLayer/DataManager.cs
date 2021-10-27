@@ -43,5 +43,23 @@ namespace DataAccessLayer
             }
 
         }
+
+        public List<Feed> FeedDeserialize()
+        {
+            
+            try
+            {
+                XmlSerializer xmlSerializer = new XmlSerializer(typeof(List<Feed>));
+                using (FileStream inFile = new FileStream("oain.xml", FileMode.Open,
+                    FileAccess.Read))
+                {
+                    return (List<Feed>)xmlSerializer.Deserialize(inFile);
+                }
+            }
+            catch (Exception e)
+            {
+                throw new SerializerException("oain.xml", "Could not deserialize the file.");
+            }
+        }
     }
 }
