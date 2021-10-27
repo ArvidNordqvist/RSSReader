@@ -22,8 +22,10 @@ namespace RSSReader
         {
             InitializeComponent();
             categoryController = new SuperController();
-            FyllKategoriLista();
-            FillCategoryComboBox();
+            //FyllKategoriLista();
+            //FillCategoryComboBox();
+            FillCategorylist();
+            FillFeedList();
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -68,10 +70,11 @@ namespace RSSReader
             {
                 //creates a Category
                 categoryController.CreateCategory(CreateCategoryTextBox.Text);
-                //fills the listbox
-                FyllKategoriLista();
-                //fills the combobox
-                FillCategoryComboBox();
+
+                // fill categories and combobox
+                FillCategorylist();
+                
+                
             }
             else
             {
@@ -90,29 +93,19 @@ namespace RSSReader
           
        
 
-        private void FyllKategoriLista()
-        {
-            List<Super> list = new List<Super>();
-            list = categoryController.GetAllSuper();
-            //LINQ query to retrieve all categories per name.
-            List<string> Category = (from Categories obj in list
-                                     select obj.Name).ToList();
-            PlaceholderCategory.DataSource = Category;
-        }
+       
 
-        private void FillCategoryComboBox()
+        private void FillCategorylist()
         {
-            CategoryComboBox.Items.Clear();
-            List<Super> list = new List<Super>();
-            list = categoryController.GetAllSuper();
-            //LINQ query to retrieve all categories per name.
-            List<string> Category = (from Categories obj in list
-                                     select obj.Name).ToList();
-            foreach (string name in Category)
+
+            PlaceholderCategory.DataSource = categoryController.Categorylist();
+            foreach (string name in categoryController.Categorylist())
             {
                 CategoryComboBox.Items.Add(name);
             }
         }
+
+      
 
         private List<Feed> FeedListaByCategory(String kategori)
         {
@@ -134,8 +127,7 @@ namespace RSSReader
             //deletes the selected category and removes it from the xml file aswell as the list and combobox.
             string category = PlaceholderCategory.GetItemText(PlaceholderCategory.SelectedItem);
             categoryController.DeleteCategory(category);
-            FyllKategoriLista();
-            FillCategoryComboBox();
+            FillCategorylist();
         }
 
         private void NewPodButton_Click(object sender, EventArgs e)
@@ -163,8 +155,42 @@ namespace RSSReader
 
                 string episode = $"Episodes: {feed.Items.ToList().Count}";
                 string title = NameTextBox.Text;
-                dataGridView1.Rows.Add(episode, title, FrequencyComboBox.SelectedItem.ToString(), CategoryComboBox.Text);
-                //Feed newFeed = new Feed(title, );
+                string frekvens = FrequencyComboBox.SelectedItem.ToString();
+                string cat = CategoryComboBox.SelectedItem.ToString();
+                dataGridView1.Rows.Add(episode, title, frekvens, cat);
+                
+                categoryController.CreateFeed(title, frekvens, URLTextBox.Text, cat);
+            }
+        }
+
+        private void FillFeedList()
+        {
+            SyndicationFeed feed = null;
+            List<Feed> aList = new List<Feed>();
+            aList = categoryController.Feedlist();
+            foreach(Feed obj in aList)
+            {
+                
+                try
+                {
+                    using (var reader = XmlReader.Create(obj.URL))
+                    {
+                        feed = SyndicationFeed.Load(reader);
+                    }
+                }
+                catch
+                {
+                } // TODO: Deal with unavailable resource.
+                if (feed != null)
+                {
+
+                    string episode = $"Episodes: {feed.Items.ToList().Count}";
+                    string title = obj.Name;
+                    string frekvens =obj.frekvens;
+                    string cat = obj.category;
+                    dataGridView1.Rows.Add(episode, title, frekvens, cat);
+
+                }
             }
         }
 

@@ -6,7 +6,7 @@ namespace Models
         public string pod;
         public string description;
         public Episode(string name, string description, string pod) :
-            base(name)
+            base(name, "Episode")
         {
             this.description = description;
             this.pod = pod;

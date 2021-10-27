@@ -47,6 +47,21 @@ namespace DataAccessLayer.Repositories
             return listOfSuperDeserialized;
         }
 
+        public List<Feed> GetAllFeeds()
+        {
+            List<Feed> listOfSuperDeserialized = new List<Feed>();
+            try
+            {
+                listOfSuperDeserialized = dataManager.Deserialize();
+            }
+            catch (Exception)
+            {
+
+
+            }
+
+            return listOfSuperDeserialized;
+        }
 
 
 
@@ -77,12 +92,6 @@ namespace DataAccessLayer.Repositories
             return GetAll().FindIndex(e => e.Name.Equals(name));
         }
 
-        //public List<Super> GetListOfSuperByCategory(string name)
-        //{
-        //    List<Super> list = new List<Super>();
-        //    list = GetAll();
-        //    list.Find(x => x.PartName.Contains("seat")));
-        //    return GetAll().Contains();
-        //}
+        
     }
 }

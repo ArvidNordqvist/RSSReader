@@ -4,7 +4,7 @@ namespace Models
     public class Categories : Super
     {
 
-        public Categories(String kategori) : base(kategori)
+        public Categories(String kategori) : base(kategori, "Category")
         {
 
         }
