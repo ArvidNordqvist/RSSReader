@@ -73,8 +73,8 @@ namespace RSSReader
 
                 // fill categories and combobox
                 FillCategorylist();
-                
-                
+
+
             }
             else
             {
@@ -83,17 +83,17 @@ namespace RSSReader
                 string caption = "Error Detected in Input";
 
                 // Displays the MessageBox.
-               MessageBox.Show(message, caption);
+                MessageBox.Show(message, caption);
 
             }
         }
 
-        
-                
-          
-       
 
-       
+
+
+
+
+
 
         private void FillCategorylist()
         {
@@ -105,7 +105,7 @@ namespace RSSReader
             }
         }
 
-      
+
 
         private List<Feed> FeedListaByCategory(String kategori)
         {
@@ -158,7 +158,7 @@ namespace RSSReader
                 string frekvens = FrequencyComboBox.SelectedItem.ToString();
                 string cat = CategoryComboBox.SelectedItem.ToString();
                 dataGridView1.Rows.Add(episode, title, frekvens, cat);
-                
+
                 categoryController.CreateFeed(title, frekvens, URLTextBox.Text, cat);
             }
         }
@@ -166,37 +166,50 @@ namespace RSSReader
         private void FillFeedList()
         {
             SyndicationFeed feed = null;
-            List<Feed> aList = new List<Feed>();
-            aList = categoryController.Feedlist();
-            foreach(Feed obj in aList)
+            List<Super> aList = new List<Super>();
+            
+            aList = categoryController.GetAllSuper();
+            for (int i = 0; i < aList.Count; i++)
             {
-                
-                try
+                if (aList[i].DataType == "Category")
                 {
-                    using (var reader = XmlReader.Create(obj.URL))
-                    {
-                        feed = SyndicationFeed.Load(reader);
-                    }
+                    continue;
                 }
-                catch
+                
                 {
-                } // TODO: Deal with unavailable resource.
-                if (feed != null)
-                {
+                    try
+                    {
+                        
+                        
+                            Feed obj = (Feed)aList[i];
+                            using (var reader = XmlReader.Create(obj.URL))
+                            {
+                                feed = SyndicationFeed.Load(reader);
+                            }
+                            if (feed != null)
+                            {
 
-                    string episode = $"Episodes: {feed.Items.ToList().Count}";
-                    string title = obj.Name;
-                    string frekvens =obj.frekvens;
-                    string cat = obj.category;
-                    dataGridView1.Rows.Add(episode, title, frekvens, cat);
+                                string episode = $"Episodes: {feed.Items.ToList().Count}";
+                                string title = obj.Name;
+                                string frekvens = obj.frekvens;
+                                string cat = obj.category;
+                                dataGridView1.Rows.Add(episode, title, frekvens, cat);
+
+                            }
+                        
+                    }
+                    catch
+                    {
+                    } // TODO: Deal with unavailable resource.
 
                 }
             }
         }
-
-        private void dataGridView1_RowHeaderMouseDoubleClick(object sender, DataGridViewCellMouseEventArgs e)
-        {
-
-        }
     }
+
+
 }
+
+
+
+

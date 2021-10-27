@@ -13,6 +13,7 @@ namespace DataAccessLayer.Repositories
         void SaveChanges();
         List<T> GetAll();
 
+        //List<T> GetAllFeeds();
         public int GetIndex(String name);
     }
 }

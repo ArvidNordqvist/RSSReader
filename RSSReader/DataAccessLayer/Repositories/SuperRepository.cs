@@ -47,21 +47,21 @@ namespace DataAccessLayer.Repositories
             return listOfSuperDeserialized;
         }
 
-        public List<Feed> GetAllFeeds()
-        {
-            List<Feed> listOfSuperDeserialized = new List<Feed>();
-            try
-            {
-                listOfSuperDeserialized = dataManager.Deserialize();
-            }
-            catch (Exception)
-            {
+        //public List<Feed> GetAllFeeds()
+        //{
+        //    List<Feed> listOfFeedDeserialized = new List<Feed>();
+        //    try
+        //    {
+        //        listOfFeedDeserialized = dataManager.DeserializeFeed();
+        //    }
+        //    catch (Exception)
+        //    {
 
 
-            }
+        //    }
 
-            return listOfSuperDeserialized;
-        }
+        //    return listOfFeedDeserialized;
+        
 
 
 

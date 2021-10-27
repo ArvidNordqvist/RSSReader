@@ -10,6 +10,7 @@ namespace BusinessLayer.Controllers
     public class SuperController
     {
         IRepository<Super> SuperRepository;
+        
 
         public SuperController()
         {
@@ -33,6 +34,8 @@ namespace BusinessLayer.Controllers
         {
             return SuperRepository.GetAll();
         }
+
+       
 
 
 
@@ -62,22 +65,7 @@ namespace BusinessLayer.Controllers
             return listc;
         }
 
-        public List<Feed> Feedlist()
-        {
-            List<Super> list = new List<Super>();
-            List<Feed> listc = new List<Feed>();
-            list = GetAllSuper();
-
-            foreach (Super obj in list)
-            {
-                
-                if(obj.DataType == "Feed")
-                {
-                    listc.Add(obj);
-                }
-            }
-            return listc;
-        }
+        
 
         //public string GetPoddDetailsByCategory(string kategori)
         //{
@@ -85,17 +73,3 @@ namespace BusinessLayer.Controllers
         //}
     }
 }
-//public List<Super> Feedlist()
-//{
-//    List<Super> list = new List<Super>();
-//    List<Super> listc = new List<Super>();
-//    list = GetAllSuper();
-//    foreach (Super obj in list)
-//    {
-//        if (obj.DataType == "Feed")
-//        {
-//            listc.Add(obj);
-//        }
-//    }
-//    return listc;
-//}
