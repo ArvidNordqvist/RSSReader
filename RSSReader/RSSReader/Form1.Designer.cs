@@ -29,7 +29,6 @@ namespace RSSReader
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
             this.Column1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Column2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -56,9 +55,7 @@ namespace RSSReader
             this.description = new System.Windows.Forms.Label();
             this.NameTextBox = new System.Windows.Forms.TextBox();
             this.nameLabel = new System.Windows.Forms.Label();
-            this.errorProviderCategoryName = new System.Windows.Forms.ErrorProvider(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.errorProviderCategoryName)).BeginInit();
             this.SuspendLayout();
             // 
             // dataGridView1
@@ -322,14 +319,11 @@ namespace RSSReader
             this.nameLabel.TabIndex = 21;
             this.nameLabel.Text = "Name";
             // 
-            // errorProviderCategoryName
-            // 
-            this.errorProviderCategoryName.ContainerControl = this;
-            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.AutoSize = true;
             this.ClientSize = new System.Drawing.Size(995, 388);
             this.Controls.Add(this.nameLabel);
             this.Controls.Add(this.NameTextBox);
@@ -356,11 +350,11 @@ namespace RSSReader
             this.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.Name = "Form1";
             this.ShowIcon = false;
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Podcasts";
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.Form1_FormClosed);
             this.Load += new System.EventHandler(this.Form1_Load);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.errorProviderCategoryName)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -394,7 +388,6 @@ namespace RSSReader
         private System.Windows.Forms.DataGridViewTextBoxColumn Column4;
         private System.Windows.Forms.TextBox NameTextBox;
         private System.Windows.Forms.Label nameLabel;
-        private System.Windows.Forms.ErrorProvider errorProviderCategoryName;
     }
 }
 
