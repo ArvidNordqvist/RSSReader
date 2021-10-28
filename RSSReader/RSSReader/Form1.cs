@@ -114,7 +114,7 @@ namespace RSSReader
             dataGridView1.Rows.Clear();
             List<Super> aList = new List<Super>();
             aList = categoryController.GetAllSuper();
-            
+
             foreach (Super v in aList)
             {
                 if (v.DataType == "Feed")
@@ -146,7 +146,7 @@ namespace RSSReader
 
             List<Super> alist = new List<Super>();
             alist = await Task.Run(() => categoryController.GetAllSuper());
-           for (int i = 0; i < alist.Count; i++)
+            for (int i = 0; i < alist.Count; i++)
             {
                 if (alist[i].DataType == "Feed")
                 {
@@ -182,10 +182,11 @@ namespace RSSReader
 
         private void NewPodButton_Click(object sender, EventArgs e)
         {
-            if (Ex.checkTextInput(URLTextBox.Text) && Ex.checkTextInput(FrequencyComboBox.Text) && Ex.checkTextInput(CategoryComboBox.Text) && Ex.checkTextInput(NameTextBox.Text)); {
-            //RSS reader
-            ParseRSSdotnet();
-                 }
+            if (Ex.checkTextInput(URLTextBox.Text) && Ex.checkTextInput(FrequencyComboBox.Text) && Ex.checkTextInput(CategoryComboBox.Text) && Ex.checkTextInput(NameTextBox.Text)) ;
+            {
+                //RSS reader
+                ParseRSSdotnet();
+            }
         }
         private void ParseRSSdotnet()
         {
@@ -229,11 +230,7 @@ namespace RSSReader
             aList = categoryController.GetAllSuper();
             for (int i = 0; i < aList.Count; i++)
             {
-                if (aList[i].DataType == "Category" || aList[i].DataType == "Episode")
-                {
-                    continue;
-                }
-
+                if (aList[i].DataType == "Feed")
                 {
                     try
                     {
@@ -256,7 +253,11 @@ namespace RSSReader
                     }
                     catch
                     {
-                    } // TODO: Deal with unavailable resource.
+                    } // TODO: Deal with unavailable resource.   
+                }
+
+                {
+
 
                 }
             }
@@ -287,6 +288,65 @@ namespace RSSReader
             PlaceholderPod.Items.Clear();
             await episodeListPerPodcastAsync();
         }
+
+        private async Task UppdateFeedAsync(string name)
+        {
+            List<Super> alist = new List<Super>();
+
+            alist = await Task.Run(() => categoryController.GetAllSuper());
+
+            for (int i = 0; i < alist.Count; i++)
+            {
+                if (alist[i].DataType == "Feed")
+                {
+                    Feed f = (Feed)alist[i];
+                    if (f.Name == name)
+                    {
+                        Feed fe = new Feed(NameTextBox.Text, FrequencyComboBox.Text, URLTextBox.Text, CategoryComboBox.Text);
+
+                        categoryController.Update(alist[i].Name, fe);
+                    }
+                }
+                    if (alist[i].DataType == "Episode")
+                    {
+                        Episode e = (Episode)alist[i];
+                        if (e.pod == name)
+                        {
+                            Episode ep = new Episode(e.Name, e.description, NameTextBox.Text);
+
+                            categoryController.Update(alist[i].Name, ep);
+                        }
+                    }
+                }
+            
+        }
+
+        private async Task UppdateCategoryAsync(string cat, string newCat)
+        {
+            List<Super> alist = new List<Super>();
+
+            alist = await Task.Run(() => categoryController.GetAllSuper());
+
+            for (int i = 0; i < alist.Count; i++)
+            {
+                if (alist[i].Name == cat)
+                {
+                    Categories cate = new Categories(newCat);
+                    categoryController.Update(alist[i].Name, cate);
+                }
+                if (alist[i].DataType == "Feed")
+                {
+                    Feed f = (Feed)alist[i];
+                    if (f.category == cat)
+                    {
+
+                        Feed fe = new Feed(f.Name, f.frekvens, f.URL, newCat);
+                        categoryController.Update(alist[i].Name, fe);
+                    }
+                }
+            }
+        }
+
         private async void DeletePodButton_Click(object sender, EventArgs e)
         {
             List<Super> alist = new List<Super>();
@@ -320,7 +380,7 @@ namespace RSSReader
         }
         private async Task episodeListPerPodcastAsync()
         {
-            if (dataGridView1.CurrentCell.ToString() == null)
+            if (dataGridView1.CurrentCell.Value.ToString() == null)
             {
 
             }
@@ -389,7 +449,7 @@ namespace RSSReader
                 if (aList[i].DataType == "Feed")
                 {
                     Feed obj = (Feed)aList[i];
-                    if(obj.frekvens == "10 seconds")
+                    if (obj.frekvens == "10 seconds")
                     {
                         Thread.Sleep(10000);
                     }
@@ -397,7 +457,7 @@ namespace RSSReader
                     {
                         Thread.Sleep(60000);
                     }
-                    else if(obj.frekvens == "10 minutes")
+                    else if (obj.frekvens == "10 minutes")
                     {
                         Thread.Sleep(600000);
                     }
@@ -411,6 +471,43 @@ namespace RSSReader
             String cat = PlaceholderCategory.SelectedItem.ToString();
             FeedListaByCategory(cat);
         }
-    }
 
+        private async void SaveCategoryButton_Click(object sender, EventArgs e)
+        {
+            String cat = PlaceholderCategory.SelectedItem.ToString();
+            String newCat = CreateCategoryTextBox.Text;
+            await UppdateCategoryAsync(cat, newCat);
+            FillCategorylist();
+            FillFeedList();
+        }
+
+        private async void SavePodButton_Click(object sender, EventArgs e)
+        {
+            await UppdateFeedAsync(dataGridView1.CurrentCell.Value.ToString());
+        }
+
+        private async void dataGridView1_CellMouseDoubleClick(object sender, DataGridViewCellMouseEventArgs e)
+        {
+            List<Super> aList = new List<Super>();
+            string selectedItem = dataGridView1.CurrentCell.Value.ToString();
+            aList = await Task.Run(() => categoryController.GetAllSuper());
+            for (int i = 0; i < aList.Count; i++)
+            {
+                if (aList[i].DataType == "Feed")
+                {
+                    Feed obj = (Feed)aList[i];
+                    if (obj.Name == selectedItem)
+                    {
+                        URLTextBox.Text = obj.URL;
+                        CategoryComboBox.Text = obj.category;
+                        FrequencyComboBox.Text = obj.frekvens;
+                        NameTextBox.Text = obj.Name;
+                    }
+                }
+
+
+            }
+        }
+
+    }
 }
