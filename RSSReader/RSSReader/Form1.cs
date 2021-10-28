@@ -18,14 +18,17 @@ namespace RSSReader
     public partial class Form1 : Form
     {
         SuperController categoryController;
+        ExceptionClass Ex;
         public Form1()
         {
             InitializeComponent();
             categoryController = new SuperController();
+            Ex = new ExceptionClass();
             //FyllKategoriLista();
             //FillCategoryComboBox();
             FillCategorylist();
             FillFeedList();
+
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -63,7 +66,7 @@ namespace RSSReader
         private void NewCategoryButton_Click(object sender, EventArgs e)
         {
             //checks so that the user is typing longer or 3 characters
-            if (CreateCategoryTextBox.TextLength >= 3)
+            if (Ex.checkTextInput(CreateCategoryTextBox.Text))
             {
                 //creates a Category
                 categoryController.CreateCategory(CreateCategoryTextBox.Text);
@@ -76,7 +79,7 @@ namespace RSSReader
             else
             {
                 // Initializes the variables to pass to the MessageBox.Show method.
-                string message = "You did not enter 3 or more letters";
+                string message = "You did not enter 2 or more letters";
                 string caption = "Error Detected in Input";
 
                 // Displays the MessageBox.
@@ -129,8 +132,10 @@ namespace RSSReader
 
         private void NewPodButton_Click(object sender, EventArgs e)
         {
+            if (Ex.checkTextInput(URLTextBox.Text) && Ex.checkTextInput(FrequencyComboBox.Text) && Ex.checkTextInput(CategoryComboBox.Text) && Ex.checkTextInput(NameTextBox.Text)); { 
             //RSS reader
             ParseRSSdotnet();
+                 }
         }
         private void ParseRSSdotnet()
         {
@@ -258,6 +263,11 @@ namespace RSSReader
                     }
                 }
             }
+        }
+
+        private void SavePodButton_Click(object sender, EventArgs e)
+        {
+
         }
     }
 
