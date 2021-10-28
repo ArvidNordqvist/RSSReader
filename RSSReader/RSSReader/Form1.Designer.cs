@@ -192,7 +192,7 @@ namespace RSSReader
             this.SavePodButton.TabIndex = 8;
             this.SavePodButton.Text = "Save";
             this.SavePodButton.UseVisualStyleBackColor = true;
-            this.SavePodButton.Click += new System.EventHandler(this.SavePodButton_Click);
+            
             //
             // DeletePodButton
             //
@@ -226,16 +226,10 @@ namespace RSSReader
             this.PlaceholderCategory.Size = new System.Drawing.Size(581, 204);
             this.PlaceholderCategory.TabIndex = 11;
             this.PlaceholderCategory.SelectedIndexChanged += new System.EventHandler(this.PlaceholderCategory_SelectedIndexChanged);
-<<<<<<< HEAD
-<<<<<<< HEAD
+
             this.PlaceholderCategory.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.PlaceholderCategory_MouseDoubleClick);
             // 
-=======
-            //
->>>>>>> 26c425421e42fe9f19126e6998fd0be78fdff065
-=======
-            //
->>>>>>> 26c425421e42fe9f19126e6998fd0be78fdff065
+
             // CategoryListLabel
             //
             this.CategoryListLabel.AutoSize = true;
