@@ -128,8 +128,38 @@ namespace RSSReader
         {
             //deletes the selected category and removes it from the xml file aswell as the list and combobox.
             string category = PlaceholderCategory.GetItemText(PlaceholderCategory.SelectedItem);
-            categoryController.DeleteCategory(category);
+            categoryController.Delete(category);
+
+            List<Super> alist = new List<Super>();
+            alist = categoryController.GetAllSuper();
+            for (int i = 0; i < alist.Count; i++)
+            {
+                if (alist[i].DataType == "Feed")
+                {
+                    Feed obj = (Feed)alist[i];
+                    if (obj.category == category)
+                    {
+                        String name = alist[i].Name;
+                        for (int x = 0; x < alist.Count; x++)
+                        {
+                            if (alist[x].DataType == "Episode")
+                            {
+                                Episode epi = (Episode)alist[x];
+                                if (epi.pod == name)
+                                {
+                                    categoryController.Delete(epi.Name);
+                                }
+                            }
+                        }
+                        categoryController.Delete(name);
+                    }
+
+
+                }
+            }
             FillCategorylist();
+            FillFeedList();
+            PlaceholderPod.Items.Clear();
         }
 
         private void NewPodButton_Click(object sender, EventArgs e)
@@ -172,6 +202,7 @@ namespace RSSReader
 
         private void FillFeedList()
         {
+            dataGridView1.Rows.Clear();
             SyndicationFeed feed = null;
             List<Super> aList = new List<Super>();
 
@@ -236,7 +267,37 @@ namespace RSSReader
             PlaceholderPod.Items.Clear();
             await episodeListPerPodcastAsync();
         }
+        private async void DeletePodButton_Click(object sender, EventArgs e)
+        {
+            List<Super> alist = new List<Super>();
+            string dataCellItem = dataGridView1.CurrentCell.Value.ToString();
+            alist = await Task.Run(() => categoryController.GetAllSuper());
+            for (int i = 0; i < alist.Count; i++)
+            {
+                if (alist[i].DataType == "Feed")
+                {
+                    String name = alist[i].Name;
+                    if (name == dataCellItem)
+                    {
 
+                        for (int x = 0; x < alist.Count; x++)
+                        {
+                            if (alist[x].DataType == "Episode")
+                            {
+                                Episode epi = (Episode)alist[x];
+                                if (epi.pod == name)
+                                {
+                                    categoryController.Delete(epi.Name);
+                                }
+                            }
+                        }
+                        categoryController.Delete(name);
+                    }
+                }
+            }
+            FillFeedList();
+            PlaceholderPod.Items.Clear();
+        }
         private async Task episodeListPerPodcastAsync()
         {
             if (dataGridView1.CurrentCell.ToString() == null)

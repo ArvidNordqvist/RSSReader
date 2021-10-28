@@ -55,7 +55,7 @@ namespace BusinessLayer.Controllers
         //    return SuperRepository.GetByName(name).Display()
         //}
 
-        public void DeleteCategory(string name)
+        public void Delete(string name)
         {
             int index = SuperRepository.GetIndex(name);
             SuperRepository.Delete(index);

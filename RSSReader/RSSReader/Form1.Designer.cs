@@ -202,6 +202,7 @@ namespace RSSReader
             this.DeletePodButton.TabIndex = 9;
             this.DeletePodButton.Text = "Delete";
             this.DeletePodButton.UseVisualStyleBackColor = true;
+            this.DeletePodButton.Click += new System.EventHandler(this.DeletePodButton_Click);
             // 
             // PlaceholderPod
             // 
