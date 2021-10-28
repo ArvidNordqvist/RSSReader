@@ -5,6 +5,7 @@ using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Models;
@@ -18,6 +19,8 @@ namespace RSSReader
     public partial class Form1 : Form
     {
         SuperController categoryController;
+
+
         public Form1()
         {
             InitializeComponent();
@@ -26,6 +29,8 @@ namespace RSSReader
             //FillCategoryComboBox();
             FillCategorylist();
             FillFeedList();
+            Thread obj1 = new Thread(timer);
+            obj1.Start();
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -214,7 +219,7 @@ namespace RSSReader
         {
 
         }
-        
+
 
         private void testListBoxPodcasts_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -239,11 +244,11 @@ namespace RSSReader
 
             }
             else
-            {             
+            {
                 List<Super> aList = new List<Super>();
                 string dataCellItem = dataGridView1.CurrentCell.Value.ToString();
-                
-                    aList = await Task.Run(() => categoryController.GetAllSuper());
+
+                aList = await Task.Run(() => categoryController.GetAllSuper());
                 for (int i = 0; i < aList.Count; i++)
                 {
                     if (aList[i].DataType == "Category" || aList[i].DataType == "Feed")
@@ -253,10 +258,70 @@ namespace RSSReader
                     Episode obj = (Episode)aList[i];
                     if (obj.pod == dataCellItem)
                     {
-                        
+
                         PlaceholderPod.Items.Add(obj.Name);
                     }
                 }
+            }
+        }
+
+        private async void PlaceholderPod_Click(object sender, EventArgs e)
+        {
+            await ShowEpisodeDescriptionAsync();
+        }
+
+        private async Task ShowEpisodeDescriptionAsync()
+        {
+            if (PlaceholderPod.SelectedItem.ToString() == null)
+            {
+
+            }
+            else
+            {
+                List<Super> aList = new List<Super>();
+                string selectedItem = PlaceholderPod.SelectedItem.ToString();
+
+                aList = await Task.Run(() => categoryController.GetAllSuper());
+                for (int i = 0; i < aList.Count; i++)
+                {
+                    if (aList[i].DataType == "Category" || aList[i].DataType == "Feed")
+                    {
+                        continue;
+                    }
+                    Episode obj = (Episode)aList[i];
+                    if (obj.Name == selectedItem)
+                    {
+                        episodeDescriptionLabel.Text = obj.Display();
+                        description.Text = obj.description;
+                    }
+                }
+            }
+        }
+
+        private async void timer()
+        {
+            
+            List<Super> aList = new List<Super>();
+            aList = await Task.Run(() => categoryController.GetAllSuper());
+            for (int i = 0; i < aList.Count; i++)
+            {
+                if (aList[i].DataType == "Feed")
+                {
+                    Feed obj = (Feed)aList[i];
+                    if(obj.frekvens == "10 seconds")
+                    {
+                        Thread.Sleep(10000);
+                    } 
+                    else if (obj.frekvens == "1 minute")
+                    {
+                        Thread.Sleep(60000);
+                    } 
+                    else if(obj.frekvens == "10 minutes")
+                    {
+                        Thread.Sleep(600000);
+                    }
+                }
+                
             }
         }
     }

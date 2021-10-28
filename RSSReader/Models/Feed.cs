@@ -8,7 +8,7 @@ namespace Models
         public string frekvens { get; set; }
         public string URL { get; set; }
         public string category { get; set; }
-        
+
         public Feed(string name, string frekvens, string URL, string Category) :
                   base(name, "Feed")
         {
@@ -33,5 +33,7 @@ namespace Models
             list.Add(category);
             return list;
         }
+
+
     }
 }
