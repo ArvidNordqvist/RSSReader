@@ -157,6 +157,11 @@ namespace RSSReader
                 dataGridView1.Rows.Add(episode, title, frekvens, cat);
 
                 categoryController.CreateFeed(title, frekvens, URLTextBox.Text, cat);
+                foreach (SyndicationItem item in feed.Items)
+                {
+                    categoryController.CreateEpisode(item.Title.Text, item.Summary.Text, title);
+                }
+
             }
         }
 
@@ -207,58 +212,9 @@ namespace RSSReader
         }
         private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
-            
+
         }
-        private async Task episodeListPerPodcast()
-        {
-            if (dataGridView1.CurrentCell.ToString() == null)
-            {
-
-            }
-            else
-            {
-
-                SyndicationFeed feed = null;
-                List<Super> aList = new List<Super>();
-                string dataCellItem = dataGridView1.CurrentCell.Value.ToString();
-
-                aList = await Task.Run(() => categoryController.GetAllSuper());
-                for (int i = 0; i < aList.Count; i++)
-                {
-                    if (aList[i].DataType == "Category" || aList[i].DataType == "Episode")
-                    {
-                        continue;
-                    }
-
-                    if (aList[i].Name == dataCellItem)
-                    {
-                        try
-                        {
-                            Feed obj = (Feed)aList[i];
-                            using (var reader = XmlReader.Create(obj.URL))
-                            {
-                                feed = SyndicationFeed.Load(reader);
-                            }
-                            if (feed != null)
-                            {
-
-                                foreach (SyndicationItem item in feed.Items.Reverse())
-                                {
-                                    PlaceholderPod.Items.Add(item.Title.Text);
-                                }
-
-                            }
-                        }
-                        catch
-                        {
-                        } // TODO: Deal with unavailable resource.
-                    }
-
-
-
-                }
-            }
-        }
+        
 
         private void testListBoxPodcasts_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -270,15 +226,41 @@ namespace RSSReader
 
         }
 
-        private void dataGridView1_CellClick(object sender, DataGridViewCellEventArgs e)
+        private async void dataGridView1_CellClick(object sender, DataGridViewCellEventArgs e)
         {
             PlaceholderPod.Items.Clear();
-            episodeListPerPodcast();
+            await episodeListPerPodcastAsync();
+        }
+
+        private async Task episodeListPerPodcastAsync()
+        {
+            if (dataGridView1.CurrentCell.ToString() == null)
+            {
+
+            }
+            else
+            {             
+                List<Super> aList = new List<Super>();
+                string dataCellItem = dataGridView1.CurrentCell.Value.ToString();
+                
+                    aList = await Task.Run(() => categoryController.GetAllSuper());
+                for (int i = 0; i < aList.Count; i++)
+                {
+                    if (aList[i].DataType == "Category" || aList[i].DataType == "Feed")
+                    {
+                        continue;
+                    }
+                    Episode obj = (Episode)aList[i];
+                    if (obj.pod == dataCellItem)
+                    {
+                        
+                        PlaceholderPod.Items.Add(obj.Name);
+                    }
+                }
+            }
         }
     }
 
 }
-
-
 
 

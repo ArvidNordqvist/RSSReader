@@ -35,7 +35,12 @@ namespace BusinessLayer.Controllers
             return SuperRepository.GetAll();
         }
 
-       
+        public void CreateEpisode(string name, string description, string pod)
+        {
+            Episode newEpisode = new Episode(name, description, pod);
+
+            SuperRepository.Create(newEpisode);
+        }
 
 
 
