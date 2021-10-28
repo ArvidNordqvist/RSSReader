@@ -4,17 +4,22 @@ using System.Text;
 using DataAccessLayer.Repositories;
 using Models;
 using System.Linq;
+using System.Timers;
+using System.Threading.Tasks;
 
 namespace BusinessLayer.Controllers
 {
     public class SuperController
     {
         IRepository<Super> SuperRepository;
-        
 
+        
         public SuperController()
         {
             SuperRepository = new SuperRepository();
+            
+            
+            
         }
         public void CreateCategory(string name)
         {
@@ -50,7 +55,7 @@ namespace BusinessLayer.Controllers
         //    return SuperRepository.GetByName(name).Display()
         //}
 
-        public void DeleteCategory(string name)
+        public void Delete(string name)
         {
             int index = SuperRepository.GetIndex(name);
             SuperRepository.Delete(index);
@@ -70,7 +75,6 @@ namespace BusinessLayer.Controllers
             return listc;
         }
 
-        
 
         //public string GetPoddDetailsByCategory(string kategori)
         //{
