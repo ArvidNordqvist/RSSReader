@@ -104,14 +104,28 @@ namespace RSSReader
 
 
 
-        private List<Feed> FeedListaByCategory(String kategori)
+        private void FeedListaByCategory(String kategori)
         {
-            List<Super> list = new List<Super>();
-            list = categoryController.GetAllSuper();
-            //return a list of feeds depending on the Category searched
-            return (from Feed obj in list
-                    where obj.category.Equals(kategori)
-                    select obj).ToList();
+            dataGridView1.Rows.Clear();
+            List<Super> aList = new List<Super>();
+            aList = categoryController.GetAllSuper();
+            
+            foreach (Super v in aList)
+            {
+                if (v.DataType == "Feed")
+                {
+                    Feed obj = (Feed)v; //gör om objektet från super till feed för att få tillgång till category fältet
+                    if (obj.category == kategori)
+                    {
+                        string episode = "";
+                        string title = obj.Name;
+                        string frekvens = obj.frekvens;
+                        string cat = obj.category;
+                        dataGridView1.Rows.Add(episode, title, frekvens, cat);
+                    }
+                }
+            }
+
         }
 
         private void PlaceholderCategory_SelectedIndexChanged(object sender, EventArgs e)
@@ -119,15 +133,15 @@ namespace RSSReader
 
         }
 
-        private void DeleteCategoryButton_Click(object sender, EventArgs e)
+        private async Task deleteCatAsync()
         {
             //deletes the selected category and removes it from the xml file aswell as the list and combobox.
             string category = PlaceholderCategory.GetItemText(PlaceholderCategory.SelectedItem);
             categoryController.Delete(category);
 
             List<Super> alist = new List<Super>();
-            alist = categoryController.GetAllSuper();
-            for (int i = 0; i < alist.Count; i++)
+            alist = await Task.Run(() => categoryController.GetAllSuper());
+           for (int i = 0; i < alist.Count; i++)
             {
                 if (alist[i].DataType == "Feed")
                 {
@@ -155,6 +169,10 @@ namespace RSSReader
             FillCategorylist();
             FillFeedList();
             PlaceholderPod.Items.Clear();
+        }
+        private async void DeleteCategoryButton_Click(object sender, EventArgs e)
+        {
+            await deleteCatAsync();
         }
 
         private void NewPodButton_Click(object sender, EventArgs e)
@@ -322,6 +340,12 @@ namespace RSSReader
             }
             FillFeedList();
             PlaceholderPod.Items.Clear();
+        }
+
+        private void PlaceholderCategory_MouseDoubleClick(object sender, MouseEventArgs e)
+        {
+            String cat = PlaceholderCategory.SelectedItem.ToString();
+            FeedListaByCategory(cat);
         }
     }
 }
