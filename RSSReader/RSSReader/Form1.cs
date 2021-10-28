@@ -5,6 +5,7 @@ using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Models;
@@ -18,14 +19,18 @@ namespace RSSReader
     public partial class Form1 : Form
     {
         SuperController categoryController;
+        ExceptionClass Ex;
         public Form1()
         {
             InitializeComponent();
             categoryController = new SuperController();
+            Ex = new ExceptionClass();
             //FyllKategoriLista();
             //FillCategoryComboBox();
             FillCategorylist();
             FillFeedList();
+            Thread obj1 = new Thread(timer);
+            obj1.Start();
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -63,7 +68,7 @@ namespace RSSReader
         private void NewCategoryButton_Click(object sender, EventArgs e)
         {
             //checks so that the user is typing longer or 3 characters
-            if (CreateCategoryTextBox.TextLength >= 3)
+            if (Ex.checkTextInput(CreateCategoryTextBox.Text))
             {
                 //creates a Category
                 categoryController.CreateCategory(CreateCategoryTextBox.Text);
@@ -76,7 +81,7 @@ namespace RSSReader
             else
             {
                 // Initializes the variables to pass to the MessageBox.Show method.
-                string message = "You did not enter 3 or more letters";
+                string message = "You did not enter 2 or more letters";
                 string caption = "Error Detected in Input";
 
                 // Displays the MessageBox.
@@ -177,8 +182,10 @@ namespace RSSReader
 
         private void NewPodButton_Click(object sender, EventArgs e)
         {
+            if (Ex.checkTextInput(URLTextBox.Text) && Ex.checkTextInput(FrequencyComboBox.Text) && Ex.checkTextInput(CategoryComboBox.Text) && Ex.checkTextInput(NameTextBox.Text)); {
             //RSS reader
             ParseRSSdotnet();
+                 }
         }
         private void ParseRSSdotnet()
         {
@@ -280,7 +287,37 @@ namespace RSSReader
             PlaceholderPod.Items.Clear();
             await episodeListPerPodcastAsync();
         }
+        private async void DeletePodButton_Click(object sender, EventArgs e)
+        {
+            List<Super> alist = new List<Super>();
+            string dataCellItem = dataGridView1.CurrentCell.Value.ToString();
+            alist = await Task.Run(() => categoryController.GetAllSuper());
+            for (int i = 0; i < alist.Count; i++)
+            {
+                if (alist[i].DataType == "Feed")
+                {
+                    String name = alist[i].Name;
+                    if (name == dataCellItem)
+                    {
 
+                        for (int x = 0; x < alist.Count; x++)
+                        {
+                            if (alist[x].DataType == "Episode")
+                            {
+                                Episode epi = (Episode)alist[x];
+                                if (epi.pod == name)
+                                {
+                                    categoryController.Delete(epi.Name);
+                                }
+                            }
+                        }
+                        categoryController.Delete(name);
+                    }
+                }
+            }
+            FillFeedList();
+            PlaceholderPod.Items.Clear();
+        }
         private async Task episodeListPerPodcastAsync()
         {
             if (dataGridView1.CurrentCell.ToString() == null)
@@ -309,37 +346,64 @@ namespace RSSReader
             }
         }
 
-        private async void DeletePodButton_Click(object sender, EventArgs e)
+        private async void PlaceholderPod_Click(object sender, EventArgs e)
         {
-            List<Super> alist = new List<Super>();
-            string dataCellItem = dataGridView1.CurrentCell.Value.ToString();
-            alist = await Task.Run(() => categoryController.GetAllSuper());
-            for (int i = 0; i < alist.Count; i++)
+            await ShowEpisodeDescriptionAsync();
+        }
+
+        private async Task ShowEpisodeDescriptionAsync()
+        {
+            if (PlaceholderPod.SelectedItem.ToString() == null)
             {
-                if (alist[i].DataType == "Feed")
+
+            }
+            else
+            {
+                List<Super> aList = new List<Super>();
+                string selectedItem = PlaceholderPod.SelectedItem.ToString();
+
+                aList = await Task.Run(() => categoryController.GetAllSuper());
+                for (int i = 0; i < aList.Count; i++)
                 {
-                    String name = alist[i].Name;
-                    if (name == dataCellItem)
+                    if (aList[i].DataType == "Category" || aList[i].DataType == "Feed")
                     {
-
-                        for (int x = 0; x < alist.Count; x++)
-                        {
-                            if (alist[x].DataType == "Episode")
-                            {
-                                Episode epi = (Episode)alist[x];
-                                if (epi.pod == name)
-                                {
-                                    categoryController.Delete(epi.Name);
-                                }
-                            }
-                        }
-                        categoryController.Delete(name);
+                        continue;
                     }
-
+                    Episode obj = (Episode)aList[i];
+                    if (obj.Name == selectedItem)
+                    {
+                        episodeDescriptionLabel.Text = obj.Display();
+                        description.Text = obj.description;
+                    }
                 }
             }
-            FillFeedList();
-            PlaceholderPod.Items.Clear();
+        }
+
+        private async void timer()
+        {
+
+            List<Super> aList = new List<Super>();
+            aList = await Task.Run(() => categoryController.GetAllSuper());
+            for (int i = 0; i < aList.Count; i++)
+            {
+                if (aList[i].DataType == "Feed")
+                {
+                    Feed obj = (Feed)aList[i];
+                    if(obj.frekvens == "10 seconds")
+                    {
+                        Thread.Sleep(10000);
+                    }
+                    else if (obj.frekvens == "1 minute")
+                    {
+                        Thread.Sleep(60000);
+                    }
+                    else if(obj.frekvens == "10 minutes")
+                    {
+                        Thread.Sleep(600000);
+                    }
+                }
+
+            }
         }
 
         private void PlaceholderCategory_MouseDoubleClick(object sender, MouseEventArgs e)
@@ -348,6 +412,5 @@ namespace RSSReader
             FeedListaByCategory(cat);
         }
     }
+
 }
-
-
