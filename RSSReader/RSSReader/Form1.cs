@@ -38,10 +38,7 @@ namespace RSSReader
 
         }
 
-        private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
-        {
 
-        }
 
         private void Form1_FormClosed(object sender, FormClosedEventArgs e)
         {
@@ -153,7 +150,7 @@ namespace RSSReader
             if (feed != null)
             {
 
-                string episode = $"Episodes: {feed.Items.ToList().Count}";
+                string episode = $"{feed.Items.ToList().Count}";
                 string title = NameTextBox.Text;
                 string frekvens = FrequencyComboBox.SelectedItem.ToString();
                 string cat = CategoryComboBox.SelectedItem.ToString();
@@ -167,36 +164,34 @@ namespace RSSReader
         {
             SyndicationFeed feed = null;
             List<Super> aList = new List<Super>();
-            
+
             aList = categoryController.GetAllSuper();
             for (int i = 0; i < aList.Count; i++)
             {
-                if (aList[i].DataType == "Category")
+                if (aList[i].DataType == "Category" || aList[i].DataType == "Episode")
                 {
                     continue;
                 }
-                
+
                 {
                     try
                     {
-                        
-                        
-                            Feed obj = (Feed)aList[i];
-                            using (var reader = XmlReader.Create(obj.URL))
-                            {
-                                feed = SyndicationFeed.Load(reader);
-                            }
-                            if (feed != null)
-                            {
+                        Feed obj = (Feed)aList[i];
+                        using (var reader = XmlReader.Create(obj.URL))
+                        {
+                            feed = SyndicationFeed.Load(reader);
+                        }
+                        if (feed != null)
+                        {
 
-                                string episode = $"Episodes: {feed.Items.ToList().Count}";
-                                string title = obj.Name;
-                                string frekvens = obj.frekvens;
-                                string cat = obj.category;
-                                dataGridView1.Rows.Add(episode, title, frekvens, cat);
+                            string episode = $"{feed.Items.ToList().Count}";
+                            string title = obj.Name;
+                            string frekvens = obj.frekvens;
+                            string cat = obj.category;
+                            dataGridView1.Rows.Add(episode, title, frekvens, cat);
 
-                            }
-                        
+                        }
+
                     }
                     catch
                     {
@@ -205,8 +200,82 @@ namespace RSSReader
                 }
             }
         }
-    }
 
+        private void dataGridView1_RowHeaderMouseDoubleClick(object sender, DataGridViewCellMouseEventArgs e)
+        {
+
+        }
+        private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+            
+        }
+        private async Task episodeListPerPodcast()
+        {
+            if (dataGridView1.CurrentCell.ToString() == null)
+            {
+
+            }
+            else
+            {
+
+                SyndicationFeed feed = null;
+                List<Super> aList = new List<Super>();
+                string dataCellItem = dataGridView1.CurrentCell.Value.ToString();
+
+                aList = await Task.Run(() => categoryController.GetAllSuper());
+                for (int i = 0; i < aList.Count; i++)
+                {
+                    if (aList[i].DataType == "Category" || aList[i].DataType == "Episode")
+                    {
+                        continue;
+                    }
+
+                    if (aList[i].Name == dataCellItem)
+                    {
+                        try
+                        {
+                            Feed obj = (Feed)aList[i];
+                            using (var reader = XmlReader.Create(obj.URL))
+                            {
+                                feed = SyndicationFeed.Load(reader);
+                            }
+                            if (feed != null)
+                            {
+
+                                foreach (SyndicationItem item in feed.Items.Reverse())
+                                {
+                                    PlaceholderPod.Items.Add(item.Title.Text);
+                                }
+
+                            }
+                        }
+                        catch
+                        {
+                        } // TODO: Deal with unavailable resource.
+                    }
+
+
+
+                }
+            }
+        }
+
+        private void testListBoxPodcasts_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void testListBoxPodcasts_MouseClick(object sender, MouseEventArgs e)
+        {
+
+        }
+
+        private void dataGridView1_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            PlaceholderPod.Items.Clear();
+            episodeListPerPodcast();
+        }
+    }
 
 }
 
