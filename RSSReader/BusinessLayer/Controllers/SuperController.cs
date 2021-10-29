@@ -27,7 +27,7 @@ namespace BusinessLayer.Controllers
             SuperRepository.Create(newCategory);
         }
 
-        public void CreateFeed(string name, string frekvens, string URL, string Category)
+        public void CreateFeed(string name, double frekvens, string URL, string Category)
         {
             Feed newFeed = new Feed(name, frekvens, URL, Category);
 

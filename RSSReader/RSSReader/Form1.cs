@@ -19,28 +19,24 @@ namespace RSSReader
     public partial class Form1 : Form
     {
         SuperController categoryController;
-        EmptyStringException Ex;
         public Form1()
         {
             InitializeComponent();
             categoryController = new SuperController();
             FillCategorylist();
             FillFeedList();
-            Thread obj1 = new Thread(timer);
-            obj1.Start();
+            
         }
 
         private void Form1_Load(object sender, EventArgs e)
         {
-
+           
         }
 
         private void label1_Click(object sender, EventArgs e)
         {
 
         }
-
-
 
         private void Form1_FormClosed(object sender, FormClosedEventArgs e)
         {
@@ -106,7 +102,7 @@ namespace RSSReader
                     {
 
                         string title = obj.Name;
-                        string frekvens = obj.frekvens;
+                        double frekvens = obj.frekvens;
                         string cat = obj.category;
                         dataGridView1.Rows.Add(title, frekvens, cat);
                     }
@@ -159,7 +155,12 @@ namespace RSSReader
         }
         private async void DeleteCategoryButton_Click(object sender, EventArgs e)
         {
-            await deleteCatAsync();
+            DialogResult result = MessageBox.Show("Do You Want to delete Category? All podcast within this caregory will also be deleted.", "Delete", MessageBoxButtons.OKCancel, MessageBoxIcon.Information);
+            if (result.Equals(DialogResult.OK))
+            {
+               await deleteCatAsync(); 
+            }
+            
         }
 
         private void NewPodButton_Click(object sender, EventArgs e)
@@ -172,8 +173,30 @@ namespace RSSReader
                 }
                 else
                 {
+                   string frek =  FrequencyComboBox.SelectedItem.ToString();
+
+                    double frekd = 0;
+                   // ParseRSSdotnet(NameTextBox.Text, frekd, CategoryComboBox.SelectedItem.ToString(), URLTextBox.Text);
+                    if (frek == "10 seconds")
+                    {
+                        frekd = 10000;
+                        
+                    }
+                    if (frek == "1 minute")
+                    {
+                        frekd = 600000;
+                        
+                    }
+                    if (frek == "10 minutes")
+                    {
+                        frekd = 6000000;
+                        
+                    }
+                    ParseRSSdotnet(NameTextBox.Text, frekd, CategoryComboBox.SelectedItem.ToString(), URLTextBox.Text);
+
+
                     //RSS reader
-                    ParseRSSdotnet();
+
                 }
 
             }
@@ -183,34 +206,29 @@ namespace RSSReader
             }
 
         }
-        private void ParseRSSdotnet()
+        private void ParseRSSdotnet(string newTitle, double newFrekvens, string newCat, string URL)
         {
             SyndicationFeed feed = null;
 
             try
             {
-                using (var reader = XmlReader.Create(URLTextBox.Text))
+                using (var reader = XmlReader.Create(URL))
                 {
                     feed = SyndicationFeed.Load(reader);
                 }
-
-
-                if (feed != null)
-                {
-
-
-                    string title = NameTextBox.Text;
-                    string frekvens = FrequencyComboBox.SelectedItem.ToString();
-                    string cat = CategoryComboBox.SelectedItem.ToString();
-                    dataGridView1.Rows.Add(title, frekvens, cat);
-
-                    categoryController.CreateFeed(title, frekvens, URLTextBox.Text, cat);
+                    string title = newTitle;
+                    double frekvens = newFrekvens;
+                    string cat = newCat;
+                    
+                    categoryController.CreateFeed(title, frekvens, URL, cat);
+                    
+                    
                     foreach (SyndicationItem item in feed.Items)
                     {
                         categoryController.CreateEpisode(item.Title.Text, item.Summary.Text, title);
                     }
-
-                }
+                    FillFeedList();
+                
             }
             catch
             {
@@ -231,7 +249,7 @@ namespace RSSReader
                     {
                         Feed obj = (Feed)aList[i];
                         string title = obj.Name;
-                        string frekvens = obj.frekvens;
+                        double frekvens = obj.frekvens;
                         string cat = obj.category;
                         dataGridView1.Rows.Add(title, frekvens, cat);
 
@@ -278,7 +296,24 @@ namespace RSSReader
                     Feed f = (Feed)alist[i];
                     if (f.Name == name)
                     {
-                        Feed fe = new Feed(NameTextBox.Text, FrequencyComboBox.Text, URLTextBox.Text, CategoryComboBox.Text);
+                        string frek = FrequencyComboBox.SelectedItem.ToString();
+                        double frekd = 0;
+                        if (frek == "10 seconds")
+                        {
+                            frekd = 10000;
+
+                        }
+                        if (frek == "1 minute")
+                        {
+                            frekd = 600000;
+
+                        }
+                        if (frek == "10 minutes")
+                        {
+                            frekd = 6000000;
+
+                        }
+                        Feed fe = new Feed(NameTextBox.Text, frekd, URLTextBox.Text, CategoryComboBox.Text);
 
                         categoryController.Update(alist[i].Name, fe);
                     }
@@ -328,19 +363,21 @@ namespace RSSReader
 
         private async void DeletePodButton_Click(object sender, EventArgs e)
         {
-            await DeleteFeedAsync();
+            await DeleteFeedAsync(dataGridView1.CurrentCell.Value.ToString());
+            FillFeedList();
+            PlaceholderPod.Items.Clear();
         }
 
-        private async Task DeleteFeedAsync()
+        private async Task DeleteFeedAsync(string feedName)
         {
             List<Super> alist = new List<Super>();
-            string dataCellItem = dataGridView1.CurrentCell.Value.ToString();
+            string dataCellItem = feedName;
             alist = await Task.Run(() => categoryController.GetAllSuper());
             for (int i = 0; i < alist.Count; i++)
             {
                 if (alist[i].DataType == "Feed")
                 {
-                    String name = alist[i].Name;
+                    string name = alist[i].Name;
                     if (name == dataCellItem)
                     {
 
@@ -359,8 +396,8 @@ namespace RSSReader
                     }
                 }
             }
-            FillFeedList();
-            PlaceholderPod.Items.Clear();
+            
+            
         }
 
         private async Task episodeListPerPodcastAsync()
@@ -417,26 +454,38 @@ namespace RSSReader
             }
         }
 
-        private async void timer()
+        private async void timerAsync()
         {
+            
             List<Super> aList = new List<Super>();
             aList = await Task.Run(() => categoryController.GetAllSuper());
             for (int i = 0; i < aList.Count; i++)
             {
+               
                 if (aList[i].DataType == "Feed")
                 {
                     Feed obj = (Feed)aList[i];
-                    if (obj.frekvens == "10 seconds")
+                    
+                    if (obj.frekvens == 10000)
                     {
+                        
                         Thread.Sleep(10000);
+                        await DeleteFeedAsync(obj.Name);
+                        ParseRSSdotnet(obj.Name, obj.frekvens, obj.category, obj.URL);
                     }
-                    else if (obj.frekvens == "1 minute")
+                    if (obj.frekvens == 1)
                     {
+                        
                         Thread.Sleep(60000);
+                        await DeleteFeedAsync(obj.Name);
+                        ParseRSSdotnet(obj.Name, obj.frekvens, obj.category, obj.URL);
                     }
-                    else if (obj.frekvens == "10 minutes")
+                    if (obj.frekvens == 1000000)
                     {
+                        
                         Thread.Sleep(600000);
+                        await DeleteFeedAsync(obj.Name);
+                        ParseRSSdotnet(obj.Name, obj.frekvens, obj.category, obj.URL);
                     }
                 }
 
@@ -475,15 +524,17 @@ namespace RSSReader
                     Feed obj = (Feed)aList[i];
                     if (obj.Name == selectedItem)
                     {
+                        
+
                         URLTextBox.Text = obj.URL;
                         CategoryComboBox.Text = obj.category;
-                        FrequencyComboBox.Text = obj.frekvens;
+                        FrequencyComboBox.Text = obj.frekvens.ToString();
                         NameTextBox.Text = obj.Name;
                     }
                 }
+               
 
-
-            }
+                }
         }
 
     }

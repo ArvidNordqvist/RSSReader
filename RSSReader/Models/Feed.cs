@@ -5,11 +5,13 @@ namespace Models
 {
     public class Feed : Super
     {
-        public string frekvens { get; set; }
+        public DateTime NextUppdate { get; set; }
+
+        public double frekvens;
         public string URL { get; set; }
         public string category { get; set; }
 
-        public Feed(string name, string frekvens, string URL, string Category) :
+        public Feed(string name, double frekvens, string URL, string Category) :
                   base(name, "Feed")
         {
             this.frekvens = frekvens;
@@ -24,16 +26,29 @@ namespace Models
             return "This is a podcast called " + Name + "!";
         }
 
-        public override List<string> Value()
+        //public override List<string> Value()
+        //{
+        //    List<string> list = new List<string>();
+        //    list.Add(Name);
+        //    list.Add(frekvens);
+        //    list.Add(URL);
+        //    list.Add(category);
+        //    return list;
+        //}
+
+        public bool NeedsUpdate
         {
-            List<string> list = new List<string>();
-            list.Add(Name);
-            list.Add(frekvens);
-            list.Add(URL);
-            list.Add(category);
-            return list;
+            get
+            {
+                return NextUppdate <= DateTime.Now;
+            }
         }
 
+        public string Update()
+        {
+            NextUppdate = DateTime.Now.AddMilliseconds(frekvens);
+            return Name + " " + NextUppdate;
+        }
 
     }
 }

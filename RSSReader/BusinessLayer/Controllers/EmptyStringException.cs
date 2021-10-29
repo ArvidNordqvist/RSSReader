@@ -12,7 +12,7 @@ namespace BusinessLayer.Controllers
         {
             get
             {
-                return "please add all the things to add a podcast";
+                return "please add all the things to a podcast";
             }
         }
     }
