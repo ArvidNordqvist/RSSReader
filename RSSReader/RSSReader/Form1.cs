@@ -234,9 +234,19 @@ namespace RSSReader
                     }
                     catch
                     {
-                    } // TODO: Deal with unavailable resource.
+                    } // TODO: Deal with unavailable resource.   
+                }
+
+                {
+
+
                 }
             }
+        }
+
+        private void dataGridView1_RowHeaderMouseDoubleClick(object sender, DataGridViewCellMouseEventArgs e)
+        {
+
         }
 
 
@@ -250,6 +260,65 @@ namespace RSSReader
             PlaceholderPod.Items.Clear();
             await episodeListPerPodcastAsync();
         }
+
+        private async Task UppdateFeedAsync(string name)
+        {
+            List<Super> alist = new List<Super>();
+
+            alist = await Task.Run(() => categoryController.GetAllSuper());
+
+            for (int i = 0; i < alist.Count; i++)
+            {
+                if (alist[i].DataType == "Feed")
+                {
+                    Feed f = (Feed)alist[i];
+                    if (f.Name == name)
+                    {
+                        Feed fe = new Feed(NameTextBox.Text, FrequencyComboBox.Text, URLTextBox.Text, CategoryComboBox.Text);
+
+                        categoryController.Update(alist[i].Name, fe);
+                    }
+                }
+                    if (alist[i].DataType == "Episode")
+                    {
+                        Episode e = (Episode)alist[i];
+                        if (e.pod == name)
+                        {
+                            Episode ep = new Episode(e.Name, e.description, NameTextBox.Text);
+
+                            categoryController.Update(alist[i].Name, ep);
+                        }
+                    }
+                }
+            
+        }
+
+        private async Task UppdateCategoryAsync(string cat, string newCat)
+        {
+            List<Super> alist = new List<Super>();
+
+            alist = await Task.Run(() => categoryController.GetAllSuper());
+
+            for (int i = 0; i < alist.Count; i++)
+            {
+                if (alist[i].Name == cat)
+                {
+                    Categories cate = new Categories(newCat);
+                    categoryController.Update(alist[i].Name, cate);
+                }
+                if (alist[i].DataType == "Feed")
+                {
+                    Feed f = (Feed)alist[i];
+                    if (f.category == cat)
+                    {
+
+                        Feed fe = new Feed(f.Name, f.frekvens, f.URL, newCat);
+                        categoryController.Update(alist[i].Name, fe);
+                    }
+                }
+            }
+        }
+
         private async void DeletePodButton_Click(object sender, EventArgs e)
         {
             await DeleteFeedAsync();
@@ -372,6 +441,43 @@ namespace RSSReader
             String cat = PlaceholderCategory.SelectedItem.ToString();
             FeedListaByCategory(cat);
         }
-    }
 
+        private async void SaveCategoryButton_Click(object sender, EventArgs e)
+        {
+            String cat = PlaceholderCategory.SelectedItem.ToString();
+            String newCat = CreateCategoryTextBox.Text;
+            await UppdateCategoryAsync(cat, newCat);
+            FillCategorylist();
+            FillFeedList();
+        }
+
+        private async void SavePodButton_Click(object sender, EventArgs e)
+        {
+            await UppdateFeedAsync(dataGridView1.CurrentCell.Value.ToString());
+        }
+
+        private async void dataGridView1_CellMouseDoubleClick(object sender, DataGridViewCellMouseEventArgs e)
+        {
+            List<Super> aList = new List<Super>();
+            string selectedItem = dataGridView1.CurrentCell.Value.ToString();
+            aList = await Task.Run(() => categoryController.GetAllSuper());
+            for (int i = 0; i < aList.Count; i++)
+            {
+                if (aList[i].DataType == "Feed")
+                {
+                    Feed obj = (Feed)aList[i];
+                    if (obj.Name == selectedItem)
+                    {
+                        URLTextBox.Text = obj.URL;
+                        CategoryComboBox.Text = obj.category;
+                        FrequencyComboBox.Text = obj.frekvens;
+                        NameTextBox.Text = obj.Name;
+                    }
+                }
+
+
+            }
+        }
+
+    }
 }

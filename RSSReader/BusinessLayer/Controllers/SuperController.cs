@@ -14,14 +14,11 @@ namespace BusinessLayer.Controllers
     public class SuperController
     {
         IRepository<Super> SuperRepository;
-
         
+
         public SuperController()
         {
             SuperRepository = new SuperRepository();
-            
-            
-            
         }
         public void CreateCategory(string name)
         {
@@ -49,7 +46,11 @@ namespace BusinessLayer.Controllers
             SuperRepository.Create(newEpisode);
         }
 
-
+        public void Update(string name, Super x)
+        {
+            int index = SuperRepository.GetIndex(name);
+            SuperRepository.Update(index, x);
+        }
 
         //public string GetPoddDetailsByName(string name)
         //{
