@@ -19,14 +19,11 @@ namespace RSSReader
     public partial class Form1 : Form
     {
         SuperController categoryController;
-        ExceptionClass Ex;
+        EmptyStringException Ex;
         public Form1()
         {
             InitializeComponent();
             categoryController = new SuperController();
-            Ex = new ExceptionClass();
-            //FyllKategoriLista();
-            //FillCategoryComboBox();
             FillCategorylist();
             FillFeedList();
             Thread obj1 = new Thread(timer);
@@ -68,24 +65,24 @@ namespace RSSReader
         private void NewCategoryButton_Click(object sender, EventArgs e)
         {
             //checks so that the user is typing longer or 3 characters
-            if (Ex.checkTextInput(CreateCategoryTextBox.Text))
+            if (string.IsNullOrEmpty(CreateCategoryTextBox.Text))
             {
-                //creates a Category
-                categoryController.CreateCategory(CreateCategoryTextBox.Text);
 
-                // fill categories and combobox
-                FillCategorylist();
-
-
-            }
-            else
-            {
                 // Initializes the variables to pass to the MessageBox.Show method.
                 string message = "You did not enter 2 or more letters";
                 string caption = "Error Detected in Input";
 
                 // Displays the MessageBox.
                 MessageBox.Show(message, caption);
+
+            }
+            else
+            {
+                //creates a Category
+                categoryController.CreateCategory(CreateCategoryTextBox.Text);
+
+                // fill categories and combobox
+                FillCategorylist();
 
             }
         }
@@ -99,7 +96,8 @@ namespace RSSReader
 
         private void FillCategorylist()
         {
-
+            PlaceholderCategory.DataSource = null;
+            CategoryComboBox.Items.Clear();
             PlaceholderCategory.DataSource = categoryController.Categorylist();
             foreach (string name in categoryController.Categorylist())
             {
@@ -122,11 +120,11 @@ namespace RSSReader
                     Feed obj = (Feed)v; //gör om objektet från super till feed för att få tillgång till category fältet
                     if (obj.category == kategori)
                     {
-                        string episode = "";
+
                         string title = obj.Name;
                         string frekvens = obj.frekvens;
                         string cat = obj.category;
-                        dataGridView1.Rows.Add(episode, title, frekvens, cat);
+                        dataGridView1.Rows.Add(title, frekvens, cat);
                     }
                 }
             }
@@ -182,11 +180,24 @@ namespace RSSReader
 
         private void NewPodButton_Click(object sender, EventArgs e)
         {
-            if (Ex.checkTextInput(URLTextBox.Text) && Ex.checkTextInput(FrequencyComboBox.Text) && Ex.checkTextInput(CategoryComboBox.Text) && Ex.checkTextInput(NameTextBox.Text)) ;
+            try
             {
-                //RSS reader
-                ParseRSSdotnet();
+                if (string.IsNullOrEmpty(URLTextBox.Text) || FrequencyComboBox.SelectedItem == null || CategoryComboBox.SelectedItem == null || string.IsNullOrEmpty(NameTextBox.Text))
+                {
+                    throw new EmptyStringException();
+                }
+                else
+                {
+                    //RSS reader
+                    ParseRSSdotnet();
+                }
+
             }
+            catch (EmptyStringException ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+
         }
         private void ParseRSSdotnet()
         {
@@ -198,33 +209,33 @@ namespace RSSReader
                 {
                     feed = SyndicationFeed.Load(reader);
                 }
+
+
+                if (feed != null)
+                {
+
+
+                    string title = NameTextBox.Text;
+                    string frekvens = FrequencyComboBox.SelectedItem.ToString();
+                    string cat = CategoryComboBox.SelectedItem.ToString();
+                    dataGridView1.Rows.Add(title, frekvens, cat);
+
+                    categoryController.CreateFeed(title, frekvens, URLTextBox.Text, cat);
+                    foreach (SyndicationItem item in feed.Items)
+                    {
+                        categoryController.CreateEpisode(item.Title.Text, item.Summary.Text, title);
+                    }
+
+                }
             }
             catch
             {
             } // TODO: Deal with unavailable resource.
-
-            if (feed != null)
-            {
-
-                string episode = $"{feed.Items.ToList().Count}";
-                string title = NameTextBox.Text;
-                string frekvens = FrequencyComboBox.SelectedItem.ToString();
-                string cat = CategoryComboBox.SelectedItem.ToString();
-                dataGridView1.Rows.Add(episode, title, frekvens, cat);
-
-                categoryController.CreateFeed(title, frekvens, URLTextBox.Text, cat);
-                foreach (SyndicationItem item in feed.Items)
-                {
-                    categoryController.CreateEpisode(item.Title.Text, item.Summary.Text, title);
-                }
-
-            }
         }
 
         private void FillFeedList()
         {
             dataGridView1.Rows.Clear();
-            SyndicationFeed feed = null;
             List<Super> aList = new List<Super>();
 
             aList = categoryController.GetAllSuper();
@@ -235,20 +246,10 @@ namespace RSSReader
                     try
                     {
                         Feed obj = (Feed)aList[i];
-                        using (var reader = XmlReader.Create(obj.URL))
-                        {
-                            feed = SyndicationFeed.Load(reader);
-                        }
-                        if (feed != null)
-                        {
-
-                            string episode = $"{feed.Items.ToList().Count}";
-                            string title = obj.Name;
-                            string frekvens = obj.frekvens;
-                            string cat = obj.category;
-                            dataGridView1.Rows.Add(episode, title, frekvens, cat);
-
-                        }
+                        string title = obj.Name;
+                        string frekvens = obj.frekvens;
+                        string cat = obj.category;
+                        dataGridView1.Rows.Add(title, frekvens, cat);
 
                     }
                     catch
@@ -307,18 +308,19 @@ namespace RSSReader
                         categoryController.Update(alist[i].Name, fe);
                     }
                 }
-                    if (alist[i].DataType == "Episode")
+                if (alist[i].DataType == "Episode")
+                {
+                    Episode e = (Episode)alist[i];
+                    if (e.pod == name)
                     {
-                        Episode e = (Episode)alist[i];
-                        if (e.pod == name)
-                        {
-                            Episode ep = new Episode(e.Name, e.description, NameTextBox.Text);
+                        Episode ep = new Episode(e.Name, e.description, NameTextBox.Text);
 
-                            categoryController.Update(alist[i].Name, ep);
-                        }
+                        categoryController.Update(alist[i].Name, ep);
                     }
                 }
-            
+            }
+            FillCategorylist();
+            FillFeedList();
         }
 
         private async Task UppdateCategoryAsync(string cat, string newCat)
@@ -345,6 +347,8 @@ namespace RSSReader
                     }
                 }
             }
+            FillCategorylist();
+            FillFeedList();
         }
 
         private async void DeletePodButton_Click(object sender, EventArgs e)
