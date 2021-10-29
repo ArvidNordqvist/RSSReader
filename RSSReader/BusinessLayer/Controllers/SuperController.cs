@@ -6,6 +6,8 @@ using Models;
 using System.Linq;
 using System.Timers;
 using System.Threading.Tasks;
+using System.ServiceModel.Syndication;
+using System.Xml;
 
 namespace BusinessLayer.Controllers
 {
@@ -75,6 +77,8 @@ namespace BusinessLayer.Controllers
             return listc;
         }
 
+
+       
 
         //public string GetPoddDetailsByCategory(string kategori)
         //{

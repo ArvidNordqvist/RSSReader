@@ -30,7 +30,6 @@ namespace RSSReader
         private void InitializeComponent()
         {
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
-            this.Column1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Column2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Column3 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Column4 = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -57,15 +56,15 @@ namespace RSSReader
             this.nameLabel = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.SuspendLayout();
-            //
+            // 
             // dataGridView1
-            //
+            // 
             this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridView1.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.Column1,
             this.Column2,
             this.Column3,
             this.Column4});
+            this.dataGridView1.GridColor = System.Drawing.SystemColors.ButtonShadow;
             this.dataGridView1.Location = new System.Drawing.Point(14, 17);
             this.dataGridView1.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.dataGridView1.Name = "dataGridView1";
@@ -75,43 +74,33 @@ namespace RSSReader
             this.dataGridView1.Size = new System.Drawing.Size(780, 235);
             this.dataGridView1.TabIndex = 0;
             this.dataGridView1.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellClick);
-            this.dataGridView1.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellContentClick);
-            this.dataGridView1.RowHeaderMouseDoubleClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.dataGridView1_RowHeaderMouseDoubleClick);
-            //
-            // Column1
-            //
-            this.Column1.HeaderText = "Episode";
-            this.Column1.MinimumWidth = 6;
-            this.Column1.Name = "Column1";
-            this.Column1.ReadOnly = true;
-            this.Column1.Width = 70;
-            //
+            // 
             // Column2
-            //
+            // 
             this.Column2.HeaderText = "Name";
             this.Column2.MinimumWidth = 6;
             this.Column2.Name = "Column2";
             this.Column2.ReadOnly = true;
             this.Column2.Width = 200;
-            //
+            // 
             // Column3
-            //
+            // 
             this.Column3.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
             this.Column3.HeaderText = "Frequency";
             this.Column3.MinimumWidth = 6;
             this.Column3.Name = "Column3";
             this.Column3.ReadOnly = true;
-            //
+            // 
             // Column4
-            //
+            // 
             this.Column4.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
             this.Column4.HeaderText = "Category";
             this.Column4.MinimumWidth = 6;
             this.Column4.Name = "Column4";
             this.Column4.ReadOnly = true;
-            //
+            // 
             // URLLabel
-            //
+            // 
             this.URLLabel.AutoSize = true;
             this.URLLabel.Location = new System.Drawing.Point(27, 268);
             this.URLLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
@@ -119,18 +108,18 @@ namespace RSSReader
             this.URLLabel.Size = new System.Drawing.Size(47, 25);
             this.URLLabel.TabIndex = 1;
             this.URLLabel.Text = "URL:";
-            //
+            // 
             // URLTextBox
-            //
+            // 
             this.URLTextBox.Location = new System.Drawing.Point(27, 298);
             this.URLTextBox.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.URLTextBox.Name = "URLTextBox";
             this.URLTextBox.PlaceholderText = "http;//.....";
             this.URLTextBox.Size = new System.Drawing.Size(261, 31);
             this.URLTextBox.TabIndex = 2;
-            //
+            // 
             // UppdateFrequencyLabel
-            //
+            // 
             this.UppdateFrequencyLabel.AutoSize = true;
             this.UppdateFrequencyLabel.Location = new System.Drawing.Point(313, 268);
             this.UppdateFrequencyLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
@@ -138,9 +127,9 @@ namespace RSSReader
             this.UppdateFrequencyLabel.Size = new System.Drawing.Size(156, 25);
             this.UppdateFrequencyLabel.TabIndex = 3;
             this.UppdateFrequencyLabel.Text = "Update Frequency";
-            //
+            // 
             // FrequencyComboBox
-            //
+            // 
             this.FrequencyComboBox.FormattingEnabled = true;
             this.FrequencyComboBox.Items.AddRange(new object[] {
             "10 seconds",
@@ -151,9 +140,9 @@ namespace RSSReader
             this.FrequencyComboBox.Name = "FrequencyComboBox";
             this.FrequencyComboBox.Size = new System.Drawing.Size(145, 33);
             this.FrequencyComboBox.TabIndex = 4;
-            //
+            // 
             // CategoryLabel
-            //
+            // 
             this.CategoryLabel.AutoSize = true;
             this.CategoryLabel.Location = new System.Drawing.Point(493, 268);
             this.CategoryLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
@@ -162,18 +151,18 @@ namespace RSSReader
             this.CategoryLabel.TabIndex = 5;
             this.CategoryLabel.Text = "Category";
             this.CategoryLabel.Click += new System.EventHandler(this.CategoryLabel_Click);
-            //
+            // 
             // CategoryComboBox
-            //
+            // 
             this.CategoryComboBox.FormattingEnabled = true;
             this.CategoryComboBox.Location = new System.Drawing.Point(493, 298);
             this.CategoryComboBox.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.CategoryComboBox.Name = "CategoryComboBox";
             this.CategoryComboBox.Size = new System.Drawing.Size(115, 33);
             this.CategoryComboBox.TabIndex = 6;
-            //
+            // 
             // NewPodButton
-            //
+            // 
             this.NewPodButton.Location = new System.Drawing.Point(357, 343);
             this.NewPodButton.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.NewPodButton.Name = "NewPodButton";
@@ -182,9 +171,9 @@ namespace RSSReader
             this.NewPodButton.Text = "New";
             this.NewPodButton.UseVisualStyleBackColor = true;
             this.NewPodButton.Click += new System.EventHandler(this.NewPodButton_Click);
-            //
+            // 
             // SavePodButton
-            //
+            // 
             this.SavePodButton.Location = new System.Drawing.Point(493, 343);
             this.SavePodButton.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.SavePodButton.Name = "SavePodButton";
@@ -192,10 +181,9 @@ namespace RSSReader
             this.SavePodButton.TabIndex = 8;
             this.SavePodButton.Text = "Save";
             this.SavePodButton.UseVisualStyleBackColor = true;
-            
-            //
+            // 
             // DeletePodButton
-            //
+            // 
             this.DeletePodButton.Location = new System.Drawing.Point(630, 343);
             this.DeletePodButton.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.DeletePodButton.Name = "DeletePodButton";
@@ -204,9 +192,9 @@ namespace RSSReader
             this.DeletePodButton.Text = "Delete";
             this.DeletePodButton.UseVisualStyleBackColor = true;
             this.DeletePodButton.Click += new System.EventHandler(this.DeletePodButton_Click);
-            //
+            // 
             // PlaceholderPod
-            //
+            // 
             this.PlaceholderPod.FormattingEnabled = true;
             this.PlaceholderPod.ItemHeight = 25;
             this.PlaceholderPod.Location = new System.Drawing.Point(14, 427);
@@ -215,9 +203,9 @@ namespace RSSReader
             this.PlaceholderPod.Size = new System.Drawing.Size(778, 204);
             this.PlaceholderPod.TabIndex = 10;
             this.PlaceholderPod.Click += new System.EventHandler(this.PlaceholderPod_Click);
-            //
+            // 
             // PlaceholderCategory
-            //
+            // 
             this.PlaceholderCategory.FormattingEnabled = true;
             this.PlaceholderCategory.ItemHeight = 25;
             this.PlaceholderCategory.Location = new System.Drawing.Point(824, 45);
@@ -226,12 +214,10 @@ namespace RSSReader
             this.PlaceholderCategory.Size = new System.Drawing.Size(581, 204);
             this.PlaceholderCategory.TabIndex = 11;
             this.PlaceholderCategory.SelectedIndexChanged += new System.EventHandler(this.PlaceholderCategory_SelectedIndexChanged);
-
             this.PlaceholderCategory.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.PlaceholderCategory_MouseDoubleClick);
             // 
-
             // CategoryListLabel
-            //
+            // 
             this.CategoryListLabel.AutoSize = true;
             this.CategoryListLabel.Location = new System.Drawing.Point(824, 12);
             this.CategoryListLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
@@ -239,18 +225,18 @@ namespace RSSReader
             this.CategoryListLabel.Size = new System.Drawing.Size(100, 25);
             this.CategoryListLabel.TabIndex = 12;
             this.CategoryListLabel.Text = "Categories:";
-            //
+            // 
             // CreateCategoryTextBox
-            //
+            // 
             this.CreateCategoryTextBox.Location = new System.Drawing.Point(824, 297);
             this.CreateCategoryTextBox.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.CreateCategoryTextBox.Name = "CreateCategoryTextBox";
             this.CreateCategoryTextBox.PlaceholderText = "Name here...";
             this.CreateCategoryTextBox.Size = new System.Drawing.Size(581, 31);
             this.CreateCategoryTextBox.TabIndex = 13;
-            //
+            // 
             // CreateCategoryLabel
-            //
+            // 
             this.CreateCategoryLabel.AutoSize = true;
             this.CreateCategoryLabel.Location = new System.Drawing.Point(824, 268);
             this.CreateCategoryLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
@@ -258,9 +244,9 @@ namespace RSSReader
             this.CreateCategoryLabel.Size = new System.Drawing.Size(139, 25);
             this.CreateCategoryLabel.TabIndex = 14;
             this.CreateCategoryLabel.Text = "Create Category";
-            //
+            // 
             // NewCategoryButton
-            //
+            // 
             this.NewCategoryButton.Location = new System.Drawing.Point(824, 343);
             this.NewCategoryButton.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.NewCategoryButton.Name = "NewCategoryButton";
@@ -269,9 +255,9 @@ namespace RSSReader
             this.NewCategoryButton.Text = "New";
             this.NewCategoryButton.UseVisualStyleBackColor = true;
             this.NewCategoryButton.Click += new System.EventHandler(this.NewCategoryButton_Click);
-            //
+            // 
             // SaveCategoryButton
-            //
+            // 
             this.SaveCategoryButton.Location = new System.Drawing.Point(960, 343);
             this.SaveCategoryButton.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.SaveCategoryButton.Name = "SaveCategoryButton";
@@ -279,9 +265,9 @@ namespace RSSReader
             this.SaveCategoryButton.TabIndex = 16;
             this.SaveCategoryButton.Text = "Save";
             this.SaveCategoryButton.UseVisualStyleBackColor = true;
-            //
+            // 
             // DeleteCategoryButton
-            //
+            // 
             this.DeleteCategoryButton.Location = new System.Drawing.Point(1096, 343);
             this.DeleteCategoryButton.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.DeleteCategoryButton.Name = "DeleteCategoryButton";
@@ -290,9 +276,9 @@ namespace RSSReader
             this.DeleteCategoryButton.Text = "Delete";
             this.DeleteCategoryButton.UseVisualStyleBackColor = true;
             this.DeleteCategoryButton.Click += new System.EventHandler(this.DeleteCategoryButton_Click);
-            //
+            // 
             // episodeDescriptionLabel
-            //
+            // 
             this.episodeDescriptionLabel.AutoSize = true;
             this.episodeDescriptionLabel.Location = new System.Drawing.Point(824, 427);
             this.episodeDescriptionLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
@@ -300,9 +286,9 @@ namespace RSSReader
             this.episodeDescriptionLabel.Size = new System.Drawing.Size(0, 25);
             this.episodeDescriptionLabel.TabIndex = 18;
             this.episodeDescriptionLabel.Click += new System.EventHandler(this.label1_Click);
-            //
+            // 
             // description
-            //
+            // 
             this.description.BackColor = System.Drawing.Color.Transparent;
             this.description.Cursor = System.Windows.Forms.Cursors.Default;
             this.description.ForeColor = System.Drawing.SystemColors.GrayText;
@@ -311,18 +297,18 @@ namespace RSSReader
             this.description.Name = "description";
             this.description.Size = new System.Drawing.Size(402, 179);
             this.description.TabIndex = 19;
-            //
+            // 
             // NameTextBox
-            //
+            // 
             this.NameTextBox.Location = new System.Drawing.Point(630, 297);
             this.NameTextBox.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.NameTextBox.Name = "NameTextBox";
             this.NameTextBox.PlaceholderText = "Name here....";
             this.NameTextBox.Size = new System.Drawing.Size(163, 31);
             this.NameTextBox.TabIndex = 20;
-            //
+            // 
             // nameLabel
-            //
+            // 
             this.nameLabel.AutoSize = true;
             this.nameLabel.Location = new System.Drawing.Point(630, 268);
             this.nameLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
@@ -330,9 +316,9 @@ namespace RSSReader
             this.nameLabel.Size = new System.Drawing.Size(59, 25);
             this.nameLabel.TabIndex = 21;
             this.nameLabel.Text = "Name";
-            //
+            // 
             // Form1
-            //
+            // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 25F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoSize = true;
@@ -394,11 +380,10 @@ namespace RSSReader
         private System.Windows.Forms.Button DeleteCategoryButton;
         private System.Windows.Forms.Label episodeDescriptionLabel;
         private System.Windows.Forms.Label description;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Column1;
+        private System.Windows.Forms.TextBox NameTextBox;
+        private System.Windows.Forms.Label nameLabel;
         private System.Windows.Forms.DataGridViewTextBoxColumn Column2;
         private System.Windows.Forms.DataGridViewTextBoxColumn Column3;
         private System.Windows.Forms.DataGridViewTextBoxColumn Column4;
-        private System.Windows.Forms.TextBox NameTextBox;
-        private System.Windows.Forms.Label nameLabel;
     }
 }

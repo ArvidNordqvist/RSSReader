@@ -49,17 +49,6 @@ namespace RSSReader
         {
 
         }
-        private List<Super> lista()
-        {
-            List<Super> list = new List<Super>();
-            list = categoryController.GetAllSuper();
-            foreach (Super obj in list)
-            {
-                Console.WriteLine(obj.Name);
-            }
-            return list;
-
-        }
         private void CategoryLabel_Click(object sender, EventArgs e)
         {
 
@@ -92,14 +81,8 @@ namespace RSSReader
 
 
 
-
-
-
-
-
         private void FillCategorylist()
         {
-
             PlaceholderCategory.DataSource = categoryController.Categorylist();
             foreach (string name in categoryController.Categorylist())
             {
@@ -114,7 +97,7 @@ namespace RSSReader
             dataGridView1.Rows.Clear();
             List<Super> aList = new List<Super>();
             aList = categoryController.GetAllSuper();
-            
+
             foreach (Super v in aList)
             {
                 if (v.DataType == "Feed")
@@ -122,11 +105,11 @@ namespace RSSReader
                     Feed obj = (Feed)v; //gör om objektet från super till feed för att få tillgång till category fältet
                     if (obj.category == kategori)
                     {
-                        string episode = "";
+
                         string title = obj.Name;
                         string frekvens = obj.frekvens;
                         string cat = obj.category;
-                        dataGridView1.Rows.Add(episode, title, frekvens, cat);
+                        dataGridView1.Rows.Add(title, frekvens, cat);
                     }
                 }
             }
@@ -146,7 +129,7 @@ namespace RSSReader
 
             List<Super> alist = new List<Super>();
             alist = await Task.Run(() => categoryController.GetAllSuper());
-           for (int i = 0; i < alist.Count; i++)
+            for (int i = 0; i < alist.Count; i++)
             {
                 if (alist[i].DataType == "Feed")
                 {
@@ -182,10 +165,11 @@ namespace RSSReader
 
         private void NewPodButton_Click(object sender, EventArgs e)
         {
-            if (Ex.checkTextInput(URLTextBox.Text) && Ex.checkTextInput(FrequencyComboBox.Text) && Ex.checkTextInput(CategoryComboBox.Text) && Ex.checkTextInput(NameTextBox.Text)); {
-            //RSS reader
-            ParseRSSdotnet();
-                 }
+            if (Ex.checkTextInput(URLTextBox.Text) && Ex.checkTextInput(FrequencyComboBox.Text) && Ex.checkTextInput(CategoryComboBox.Text) && Ex.checkTextInput(NameTextBox.Text)) ;
+            {
+                //RSS reader
+                ParseRSSdotnet();
+            }
         }
         private void ParseRSSdotnet()
         {
@@ -205,11 +189,11 @@ namespace RSSReader
             if (feed != null)
             {
 
-                string episode = $"{feed.Items.ToList().Count}";
+
                 string title = NameTextBox.Text;
                 string frekvens = FrequencyComboBox.SelectedItem.ToString();
                 string cat = CategoryComboBox.SelectedItem.ToString();
-                dataGridView1.Rows.Add(episode, title, frekvens, cat);
+                dataGridView1.Rows.Add(title, frekvens, cat);
 
                 categoryController.CreateFeed(title, frekvens, URLTextBox.Text, cat);
                 foreach (SyndicationItem item in feed.Items)
@@ -229,11 +213,7 @@ namespace RSSReader
             aList = categoryController.GetAllSuper();
             for (int i = 0; i < aList.Count; i++)
             {
-                if (aList[i].DataType == "Category" || aList[i].DataType == "Episode")
-                {
-                    continue;
-                }
-
+                if (aList[i].DataType == "Feed")
                 {
                     try
                     {
@@ -245,42 +225,25 @@ namespace RSSReader
                         if (feed != null)
                         {
 
-                            string episode = $"{feed.Items.ToList().Count}";
+
                             string title = obj.Name;
                             string frekvens = obj.frekvens;
                             string cat = obj.category;
-                            dataGridView1.Rows.Add(episode, title, frekvens, cat);
-
+                            dataGridView1.Rows.Add(title, frekvens, cat);
                         }
-
                     }
                     catch
                     {
                     } // TODO: Deal with unavailable resource.
-
                 }
             }
         }
 
-        private void dataGridView1_RowHeaderMouseDoubleClick(object sender, DataGridViewCellMouseEventArgs e)
-        {
-
-        }
-        private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
-        {
-
-        }
 
 
-        private void testListBoxPodcasts_SelectedIndexChanged(object sender, EventArgs e)
-        {
 
-        }
 
-        private void testListBoxPodcasts_MouseClick(object sender, MouseEventArgs e)
-        {
 
-        }
 
         private async void dataGridView1_CellClick(object sender, DataGridViewCellEventArgs e)
         {
@@ -288,6 +251,11 @@ namespace RSSReader
             await episodeListPerPodcastAsync();
         }
         private async void DeletePodButton_Click(object sender, EventArgs e)
+        {
+            await DeleteFeedAsync();
+        }
+
+        private async Task DeleteFeedAsync()
         {
             List<Super> alist = new List<Super>();
             string dataCellItem = dataGridView1.CurrentCell.Value.ToString();
@@ -318,25 +286,19 @@ namespace RSSReader
             FillFeedList();
             PlaceholderPod.Items.Clear();
         }
+
         private async Task episodeListPerPodcastAsync()
         {
-            if (dataGridView1.CurrentCell.ToString() == null)
-            {
 
-            }
-            else
-            {
-                List<Super> aList = new List<Super>();
-                string dataCellItem = dataGridView1.CurrentCell.Value.ToString();
+            List<Super> aList = new List<Super>();
+            string dataCellItem = dataGridView1.CurrentCell.Value.ToString();
 
-                aList = await Task.Run(() => categoryController.GetAllSuper());
-                for (int i = 0; i < aList.Count; i++)
+            aList = await Task.Run(() => categoryController.GetAllSuper());
+            foreach (Super v in aList)
+            {
+                if (v.DataType == "Episode")
                 {
-                    if (aList[i].DataType == "Category" || aList[i].DataType == "Feed")
-                    {
-                        continue;
-                    }
-                    Episode obj = (Episode)aList[i];
+                    Episode obj = (Episode)v;
                     if (obj.pod == dataCellItem)
                     {
 
@@ -345,6 +307,7 @@ namespace RSSReader
                 }
             }
         }
+
 
         private async void PlaceholderPod_Click(object sender, EventArgs e)
         {
@@ -355,7 +318,6 @@ namespace RSSReader
         {
             if (PlaceholderPod.SelectedItem.ToString() == null)
             {
-
             }
             else
             {
@@ -381,7 +343,6 @@ namespace RSSReader
 
         private async void timer()
         {
-
             List<Super> aList = new List<Super>();
             aList = await Task.Run(() => categoryController.GetAllSuper());
             for (int i = 0; i < aList.Count; i++)
@@ -389,7 +350,7 @@ namespace RSSReader
                 if (aList[i].DataType == "Feed")
                 {
                     Feed obj = (Feed)aList[i];
-                    if(obj.frekvens == "10 seconds")
+                    if (obj.frekvens == "10 seconds")
                     {
                         Thread.Sleep(10000);
                     }
@@ -397,7 +358,7 @@ namespace RSSReader
                     {
                         Thread.Sleep(60000);
                     }
-                    else if(obj.frekvens == "10 minutes")
+                    else if (obj.frekvens == "10 minutes")
                     {
                         Thread.Sleep(600000);
                     }
