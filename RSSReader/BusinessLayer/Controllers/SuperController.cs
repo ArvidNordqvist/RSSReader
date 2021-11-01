@@ -19,18 +19,18 @@ namespace BusinessLayer.Controllers
         {
             SuperRepository = new SuperRepository();
         }
-        public void CreateCategory(string name)
+        public async Task CreateCategoryAsync(string name)
         {
             Categories newCategory = new Categories(name);
 
-            SuperRepository.Create(newCategory);
+            await Task.Run(() => SuperRepository.Create(newCategory));
         }
 
-        public void CreateFeed(string name, double frekvens, string URL, string Category)
+        public async Task CreateFeedAsync(string name, double frekvens, string URL, string Category)
         {
             Feed newFeed = new Feed(name, frekvens, URL, Category);
 
-            SuperRepository.Create(newFeed);
+            await Task.Run(() => SuperRepository.Create(newFeed));
         }
 
         public List<Super> GetAllSuper()
@@ -38,23 +38,23 @@ namespace BusinessLayer.Controllers
             return SuperRepository.GetAll();
         }
 
-        public void CreateEpisode(string name, string description, string pod)
+        public async Task CreateEpisodeAsync(string name, string description, string pod)
         {
             Episode newEpisode = new Episode(name, description, pod);
 
-            SuperRepository.Create(newEpisode);
+            await Task.Run(() => SuperRepository.Create(newEpisode));
         }
 
-        public void Update(string name, Super x)
+        public async Task Update(string name, Super x)
         {
-            int index = SuperRepository.GetIndex(name);
-            SuperRepository.Update(index, x);
+            int index = await Task.Run(() => SuperRepository.GetIndex(name));
+            await Task.Run(() => SuperRepository.Update(index, x));
         }
 
-        public void Delete(string name)
+        public async Task DeleteAsync(string name)
         {
-            int index = SuperRepository.GetIndex(name);
-            SuperRepository.Delete(index);
+            int index = await Task.Run(() => SuperRepository.GetIndex(name));
+            await Task.Run(() => SuperRepository.Delete(index));
 
 
         }

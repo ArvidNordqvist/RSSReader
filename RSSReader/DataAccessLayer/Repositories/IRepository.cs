@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
+
 namespace DataAccessLayer.Repositories
 {
     public interface IRepository<T> where T : class
@@ -13,7 +14,7 @@ namespace DataAccessLayer.Repositories
         void SaveChanges();
         List<T> GetAll();
 
-        //List<T> GetAllFeeds();
-        public int GetIndex(String name);
+       
+        public int GetIndex(string name);
     }
 }
