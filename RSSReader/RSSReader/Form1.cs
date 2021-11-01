@@ -5,7 +5,7 @@ using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Text;
-using System.Threading;
+
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Models;
@@ -14,18 +14,74 @@ using System.Net.Http;
 using System.Xml;
 using System.ServiceModel.Syndication;
 
+
 namespace RSSReader
 {
     public partial class Form1 : Form
     {
         SuperController categoryController;
+        private Timer timer1 = new Timer();
+        List<Super> aList = new List<Super>();
+        int numberOfTimeUpdated = 0;
         public Form1()
         {
             InitializeComponent();
             categoryController = new SuperController();
             FillCategorylist();
             FillFeedList();
+            timer1.Interval = 10000;
+            aList = categoryController.GetAllSuper();
+            timer1.Tick += Timer1_Tick;
             
+            timer1.Start();
+
+        }
+
+        
+
+        private void Timer1_Tick(object sender, EventArgs e)
+        {
+            SyndicationFeed feed = null;
+            
+            foreach (Super s in aList)
+            {
+                if (s.DataType == "Feed")
+                {
+                    Feed obj = (Feed)s;
+                    if (obj.NeedsUpdate)
+                    {
+                        String name = s.Name;
+                        for (int x = 0; x < aList.Count; x++)
+                        {
+                            if (aList[x].DataType == "Episode")
+                            {
+                                Episode epi = (Episode)aList[x];
+                                if (epi.pod == name)
+                                {
+                                    categoryController.Delete(epi.Name);
+                                }
+                            }
+                        }
+                    }
+                    try
+                    {
+                        using (var reader = XmlReader.Create(obj.URL))
+                        {
+                            feed = SyndicationFeed.Load(reader);
+                        }
+                        foreach (SyndicationItem item in feed.Items)
+                        {
+                            categoryController.CreateEpisode(item.Title.Text, item.Summary.Text, obj.Name);
+                        }
+                        FillFeedList();
+
+                    }
+                    catch
+                    {
+
+                    }
+                }
+            }
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -454,43 +510,7 @@ namespace RSSReader
             }
         }
 
-        private async void timerAsync()
-        {
-            
-            List<Super> aList = new List<Super>();
-            aList = await Task.Run(() => categoryController.GetAllSuper());
-            for (int i = 0; i < aList.Count; i++)
-            {
-               
-                if (aList[i].DataType == "Feed")
-                {
-                    Feed obj = (Feed)aList[i];
-                    
-                    if (obj.frekvens == 10000)
-                    {
-                        
-                        Thread.Sleep(10000);
-                        await DeleteFeedAsync(obj.Name);
-                        ParseRSSdotnet(obj.Name, obj.frekvens, obj.category, obj.URL);
-                    }
-                    if (obj.frekvens == 1)
-                    {
-                        
-                        Thread.Sleep(60000);
-                        await DeleteFeedAsync(obj.Name);
-                        ParseRSSdotnet(obj.Name, obj.frekvens, obj.category, obj.URL);
-                    }
-                    if (obj.frekvens == 1000000)
-                    {
-                        
-                        Thread.Sleep(600000);
-                        await DeleteFeedAsync(obj.Name);
-                        ParseRSSdotnet(obj.Name, obj.frekvens, obj.category, obj.URL);
-                    }
-                }
-
-            }
-        }
+       
 
         private void PlaceholderCategory_MouseDoubleClick(object sender, MouseEventArgs e)
         {

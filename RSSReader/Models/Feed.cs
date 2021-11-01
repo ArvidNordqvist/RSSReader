@@ -17,6 +17,7 @@ namespace Models
             this.frekvens = frekvens;
             this.URL = URL;
             category = Category;
+            Update();
         }
         private Feed()
         {
@@ -26,15 +27,6 @@ namespace Models
             return "This is a podcast called " + Name + "!";
         }
 
-        //public override List<string> Value()
-        //{
-        //    List<string> list = new List<string>();
-        //    list.Add(Name);
-        //    list.Add(frekvens);
-        //    list.Add(URL);
-        //    list.Add(category);
-        //    return list;
-        //}
 
         public bool NeedsUpdate
         {
@@ -44,10 +36,10 @@ namespace Models
             }
         }
 
-        public string Update()
+        public void Update()
         {
             NextUppdate = DateTime.Now.AddMilliseconds(frekvens);
-            return Name + " " + NextUppdate;
+            
         }
 
     }
