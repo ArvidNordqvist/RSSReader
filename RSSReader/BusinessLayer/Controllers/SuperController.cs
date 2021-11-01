@@ -15,7 +15,6 @@ namespace BusinessLayer.Controllers
     {
         IRepository<Super> SuperRepository;
         
-
         public SuperController()
         {
             SuperRepository = new SuperRepository();
@@ -52,12 +51,6 @@ namespace BusinessLayer.Controllers
             SuperRepository.Update(index, x);
         }
 
-        //public string GetPoddDetailsByName(string name)
-        //{
-        //    //
-        //    return SuperRepository.GetByName(name).Display()
-        //}
-
         public void Delete(string name)
         {
             int index = SuperRepository.GetIndex(name);
@@ -78,12 +71,17 @@ namespace BusinessLayer.Controllers
             return listc;
         }
 
+        public List<Super> FeedList()
+        {
+            List<Super> list = new List<Super>();
+            List<Super> listf = new List<Super>();
+            list = GetAllSuper();
+            listf.AddRange(from Super obj in list
+                           where obj.DataType == "Feed"
+                           select obj);
+            // returns a list of the dataType Feed, using LINQ
+            return listf;
+        }
 
-       
-
-        //public string GetPoddDetailsByCategory(string kategori)
-        //{
-        //    return SuperRepository.GetByKategori(kategori).Display();
-        //}
     }
 }

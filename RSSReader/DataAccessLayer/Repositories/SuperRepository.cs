@@ -27,8 +27,13 @@ namespace DataAccessLayer.Repositories
 
         public void Delete(int index)
         {
-            listOfSupers.RemoveAt(index);
-            SaveChanges();
+            try
+            {
+                listOfSupers.RemoveAt(index);
+                SaveChanges();
+            }
+            catch
+            { }
         }
 
         public List<Super> GetAll()
@@ -61,7 +66,7 @@ namespace DataAccessLayer.Repositories
         //    }
 
         //    return listOfFeedDeserialized;
-        
+
 
 
 
@@ -92,6 +97,6 @@ namespace DataAccessLayer.Repositories
             return GetAll().FindIndex(e => e.Name.Equals(name));
         }
 
-        
+
     }
 }

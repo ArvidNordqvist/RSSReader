@@ -62,9 +62,9 @@ namespace RSSReader
             this.FrequencyComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.FrequencyComboBox.FormattingEnabled = true;
             this.FrequencyComboBox.Items.AddRange(new object[] {
-            "10 seconds",
-            "1 minute",
-            "10 minutes"});
+            "15 minutes",
+            "30 minutes",
+            "1 hour"});
             this.FrequencyComboBox.Location = new System.Drawing.Point(219, 179);
             this.FrequencyComboBox.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.FrequencyComboBox.Name = "FrequencyComboBox";
@@ -89,7 +89,6 @@ namespace RSSReader
             this.dataGridView1.TabIndex = 0;
             this.dataGridView1.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellClick);
             this.dataGridView1.CellMouseDoubleClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.dataGridView1_CellMouseDoubleClick);
-            this.dataGridView1.RowHeaderMouseDoubleClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.dataGridView1_RowHeaderMouseDoubleClick);
             // 
             // URLLabel
             // 
@@ -126,7 +125,6 @@ namespace RSSReader
             this.CategoryLabel.Size = new System.Drawing.Size(55, 15);
             this.CategoryLabel.TabIndex = 5;
             this.CategoryLabel.Text = "Category";
-            this.CategoryLabel.Click += new System.EventHandler(this.CategoryLabel_Click);
             // 
             // CategoryComboBox
             // 
@@ -191,7 +189,6 @@ namespace RSSReader
             this.PlaceholderCategory.Name = "PlaceholderCategory";
             this.PlaceholderCategory.Size = new System.Drawing.Size(408, 124);
             this.PlaceholderCategory.TabIndex = 11;
-            this.PlaceholderCategory.SelectedIndexChanged += new System.EventHandler(this.PlaceholderCategory_SelectedIndexChanged);
             this.PlaceholderCategory.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.PlaceholderCategory_MouseDoubleClick);
             // 
             // CategoryListLabel
@@ -261,7 +258,6 @@ namespace RSSReader
             this.episodeDescriptionLabel.Name = "episodeDescriptionLabel";
             this.episodeDescriptionLabel.Size = new System.Drawing.Size(0, 15);
             this.episodeDescriptionLabel.TabIndex = 18;
-            this.episodeDescriptionLabel.Click += new System.EventHandler(this.label1_Click);
             // 
             // description
             // 
@@ -302,7 +298,7 @@ namespace RSSReader
             // Column3
             // 
             this.Column3.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.Column3.HeaderText = "Frequency";
+            this.Column3.HeaderText = "Frequency(ms)";
             this.Column3.MinimumWidth = 6;
             this.Column3.Name = "Column3";
             this.Column3.ReadOnly = true;
