@@ -8,7 +8,7 @@ namespace BusinessLayer.Controllers
 {
     public class EmptyStringException : Exception
     {
-        public override string Message
+        public override string Message //Overrides the Message and puts our desired message in return.
         {
             get
             {
@@ -16,7 +16,7 @@ namespace BusinessLayer.Controllers
             }
         }
 
-        public bool textCheck(string text)
+        public bool textCheck(string text) //Method used to validate an input.
         {
             if (string.IsNullOrEmpty(text))
             {

@@ -27,7 +27,7 @@ namespace Models
             return "This is a podcast called " + Name + "!";
         }
 
-
+        //checks if podcast needs update.
         public bool NeedsUpdate
         {
             get
@@ -36,6 +36,7 @@ namespace Models
             }
         }
 
+        //updates the podcasts next update time.
         public void Update()
         {
             NextUppdate = DateTime.Now.AddMilliseconds(frekvens);
