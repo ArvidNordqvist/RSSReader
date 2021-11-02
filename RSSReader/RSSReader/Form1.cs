@@ -31,13 +31,10 @@ namespace RSSReader
             FillCategorylist();
             FillFeedList();
             exception = new EmptyStringException();
-            timer.Interval = 60000;
+            timer.Interval = 60000; // timeinterval is 1 minute
             aList = superController.GetAllSuper();
             timer.Tick += Timer1_Tick;
-
             timer.Start();
-            
-
         }
 
 
@@ -46,20 +43,20 @@ namespace RSSReader
         {
             SyndicationFeed feed = null;
             aList = superController.FeedList();
-            foreach (Super s in aList)
+            foreach (Super s in aList) //check all the feeds if they need to uppdate (within their frequencey)
             {
                 Feed obj = (Feed)s;
                 if (obj.NeedsUpdate)
                 {
                     string name = s.Name;
-                    for (int x = 0; x < aList.Count; x++)
+                    for (int x = 0; x < aList.Count; x++) // if it needs tp uppdate
                     {
                         if (aList[x].DataType == "Episode")
                         {
                             Episode epi = (Episode)aList[x];
                             if (epi.pod == name)
                             {
-                                await superController.DeleteAsync(epi.Name);
+                                await superController.DeleteAsync(epi.Name); // remove all old epsiodes
                             }
                         }
                     }
@@ -72,7 +69,7 @@ namespace RSSReader
                     }
                     foreach (SyndicationItem item in feed.Items)
                     {
-                        await superController.CreateEpisodeAsync(item.Title.Text, item.Summary.Text, obj.Name);
+                        await superController.CreateEpisodeAsync(item.Title.Text, item.Summary.Text, obj.Name); //adds all episodes, including new ones
                     }
                     FillFeedList();
 
@@ -129,16 +126,16 @@ namespace RSSReader
         {
             PlaceholderCategory.DataSource = null;
             CategoryComboBox.Items.Clear();
-            PlaceholderCategory.DataSource = superController.Categorylist();
+            PlaceholderCategory.DataSource = superController.Categorylist(); // retrives a list of all the categories
             foreach (string name in superController.Categorylist())
             {
-                CategoryComboBox.Items.Add(name);
+                CategoryComboBox.Items.Add(name); //displays all the categories to the placeholder
             }
         }
 
 
 
-        private async void FeedListaByCategory(String kategori)
+        private async void FeedListaByCategory(string kategori)
         {
             dataGridView1.Rows.Clear();
             List<Super> aList = new List<Super>();
@@ -181,10 +178,10 @@ namespace RSSReader
                                     where epi.pod == name
                                     select epi) //selects an episode based on the selected feed name, using LINQ
                 {
-                    await superController .DeleteAsync(epi.Name);
+                    await superController.DeleteAsync(epi.Name);
                 }
 
-                await superController .DeleteAsync(name);
+                await superController.DeleteAsync(name);
             }
 
             FillCategorylist();
@@ -193,6 +190,7 @@ namespace RSSReader
         }
         private async void DeleteCategoryButton_Click(object sender, EventArgs e)
         {
+            // double checks if the user wants to delete the category and its feeds and episodes
             DialogResult result = MessageBox.Show("Do You Want to delete Category? All podcast within this caregory will also be deleted.", "Delete", MessageBoxButtons.OKCancel, MessageBoxIcon.Information);
             if (result.Equals(DialogResult.OK))
             {
@@ -210,6 +208,7 @@ namespace RSSReader
                     string frek = FrequencyComboBox.SelectedItem.ToString();
 
                     double frekd = 0;
+                    //converts the value into milliseconds
                     if (frek == "15 minutes")
                     {
                         frekd = 15 * 60 * 1000;
@@ -231,10 +230,7 @@ namespace RSSReader
                 else
                 {
                     throw new EmptyStringException();
-
-
                 }
-
             }
             catch (EmptyStringException ex)
             {
@@ -250,18 +246,15 @@ namespace RSSReader
             {
                 using (var reader = XmlReader.Create(URL))
                 {
-                    feed = SyndicationFeed.Load(reader);
+                    feed = SyndicationFeed.Load(reader); // loads the URL
                 }
                 string title = newTitle;
                 double frekvens = newFrekvens;
                 string cat = newCat;
-
                 await superController.CreateFeedAsync(title, frekvens, URL, cat);
-
-
                 foreach (SyndicationItem item in feed.Items)
                 {
-                    await superController.CreateEpisodeAsync(item.Title.Text, item.Summary.Text, title);
+                    await superController.CreateEpisodeAsync(item.Title.Text, item.Summary.Text, title); // add each episode using the XML reader
                 }
                 FillFeedList();
 
@@ -282,7 +275,7 @@ namespace RSSReader
                 {
                     Feed obj = (Feed)f;
                     string title = obj.Name;
-                    double frekvens = obj.frekvens;
+                    double frekvens = obj.frekvens / (60 * 1000); //converts milliseconds to minutes
                     string cat = obj.category;
                     dataGridView1.Rows.Add(title, frekvens, cat);
 
@@ -310,11 +303,12 @@ namespace RSSReader
                 {
                     if (alist[i].DataType == "Feed")
                     {
-                        Feed f = (Feed)alist[i];
+                        Feed f = (Feed)alist[i]; // convert super object to feed if the datatype is Feed, to get its attributes
                         if (f.Name == name)
                         {
-                            string frek = FrequencyComboBox.SelectedItem.ToString();
+                            string frek = FrequencyComboBox.SelectedItem.ToString(); // selects the selected item from the frequency combobox and then converts it to a double-type
                             double frekd = 0;
+                            // converts minutes to milliseconds
                             if (frek == "15 minutes")
                             {
                                 frekd = 15 * 60 * 1000;
@@ -330,9 +324,9 @@ namespace RSSReader
                                 frekd = 60 * 60 * 1000;
 
                             }
-                            Feed fe = new Feed(NameTextBox.Text, frekd, URLTextBox.Text, CategoryComboBox.Text);
+                            Feed fe = new Feed(NameTextBox.Text, frekd, URLTextBox.Text, CategoryComboBox.Text); // creates new feed object
 
-                            await Task.Run(() => superController.Update(alist[i].Name, fe));
+                            await Task.Run(() => superController.Update(alist[i].Name, fe)); //seralizes the new object 
                         }
                     }
                     if (alist[i].DataType == "Episode")
@@ -340,9 +334,9 @@ namespace RSSReader
                         Episode e = (Episode)alist[i];
                         if (e.pod == name)
                         {
-                            Episode ep = new Episode(e.Name, e.description, NameTextBox.Text);
+                            Episode ep = new Episode(e.Name, e.description, NameTextBox.Text); // creates new episode
 
-                            await Task.Run(() => superController.Update(alist[i].Name, ep));
+                            await Task.Run(() => superController.Update(alist[i].Name, ep));//seralizes the new episode
                         }
                     }
                 }
@@ -360,12 +354,12 @@ namespace RSSReader
 
             for (int i = 0; i < alist.Count; i++)
             {
-                if (alist[i].Name == cat)
+                if (alist[i].Name == cat) // uppdates the new category
                 {
                     Categories cate = new Categories(newCat);
                     await superController.Update(alist[i].Name, cate);
                 }
-                if (alist[i].DataType == "Feed")
+                if (alist[i].DataType == "Feed") // uppdates category field on feed object
                 {
                     Feed f = (Feed)alist[i];
                     if (f.category == cat)
@@ -397,10 +391,10 @@ namespace RSSReader
                 if (alist[i].DataType == "Feed")
                 {
                     string name = alist[i].Name;
-                    if (name == dataCellItem)
+                    if (name == dataCellItem) // checks if it is the right feed to delete
                     {
 
-                        for (int x = 0; x < alist.Count; x++)
+                        for (int x = 0; x < alist.Count; x++) // deletes all of its episodes
                         {
                             if (alist[x].DataType == "Episode")
                             {
@@ -411,12 +405,10 @@ namespace RSSReader
                                 }
                             }
                         }
-                        await superController.DeleteAsync(name);
+                        await superController.DeleteAsync(name); // deletes feed
                     }
                 }
             }
-
-
         }
 
         private async Task episodeListPerPodcastAsync()
@@ -426,16 +418,13 @@ namespace RSSReader
             string dataCellItem = dataGridView1.CurrentCell.Value.ToString();
 
             aList = await Task.Run(() => superController.GetAllSuper());
-            foreach (Super v in aList)
+            foreach (var v in aList.Where(v => v.DataType == "Episode"))
             {
-                if (v.DataType == "Episode")
+                Episode obj = (Episode)v;
+                if (obj.pod == dataCellItem) // check if the episodes belongs to the right feed
                 {
-                    Episode obj = (Episode)v;
-                    if (obj.pod == dataCellItem)
-                    {
 
-                        PlaceholderPod.Items.Add(obj.Name);
-                    }
+                    PlaceholderPod.Items.Add(obj.Name);
                 }
             }
         }
@@ -447,6 +436,7 @@ namespace RSSReader
 
         private async Task ShowEpisodeDescriptionAsync()
         {
+
             if (PlaceholderPod.SelectedItem.ToString() == null)
             {
             }
@@ -454,23 +444,22 @@ namespace RSSReader
             {
                 List<Super> aList = new List<Super>();
                 string selectedItem = PlaceholderPod.SelectedItem.ToString();
-
                 aList = await Task.Run(() => superController.GetAllSuper());
-                for (int i = 0; i < aList.Count; i++)
+                foreach (Super v in aList)
                 {
-                    if (aList[i].DataType == "Category" || aList[i].DataType == "Feed")
+                    if (v.DataType == "Episode")
                     {
-                        continue;
-                    }
-                    Episode obj = (Episode)aList[i];
-                    if (obj.Name == selectedItem)
-                    {
-                        episodeDescriptionLabel.Text = obj.Display();
-                        description.Text = obj.description;
+                        Episode obj = (Episode)v;
+                        if (obj.Name == selectedItem)
+                        {
+                            episodeDescriptionLabel.Text = obj.Display(); // runs episode method to display the description
+                            description.Text = obj.description;
+                        }
                     }
                 }
             }
         }
+
         private void PlaceholderCategory_MouseDoubleClick(object sender, MouseEventArgs e)
         {
             string cat = PlaceholderCategory.SelectedItem.ToString();
@@ -479,7 +468,7 @@ namespace RSSReader
 
         private async void SaveCategoryButton_Click(object sender, EventArgs e)
         {
-            if (exception.textCheck(CreateCategoryTextBox.Text))
+            if (exception.textCheck(CreateCategoryTextBox.Text)) // checks if the textfield is empty
             {
                 string cat = PlaceholderCategory.SelectedItem.ToString();
                 string newCat = CreateCategoryTextBox.Text;
@@ -497,6 +486,7 @@ namespace RSSReader
         {
             try
             {
+                // checks if all the fields is empty
                 if (exception.textCheck(URLTextBox.Text) && FrequencyComboBox.SelectedItem != null && CategoryComboBox.SelectedItem != null && exception.textCheck(NameTextBox.Text))
                 {
                     await UppdateFeedAsync(dataGridView1.CurrentCell.Value.ToString());
@@ -508,13 +498,14 @@ namespace RSSReader
             }
             catch (EmptyStringException ex)
             {
-                MessageBox.Show(ex.Message);
+                MessageBox.Show(ex.Message); //show message if any of the text fields is empty
             }
 
         }
 
         private async void dataGridView1_CellMouseDoubleClick(object sender, DataGridViewCellMouseEventArgs e)
         {
+            // fill feed textfields on  double click 
             List<Super> aList = new List<Super>();
             string selectedItem = dataGridView1.CurrentCell.Value.ToString();
             aList = await Task.Run(() => superController.GetAllSuper());
@@ -525,18 +516,13 @@ namespace RSSReader
                     Feed obj = (Feed)aList[i];
                     if (obj.Name == selectedItem)
                     {
-
-
                         URLTextBox.Text = obj.URL;
                         CategoryComboBox.Text = obj.category;
                         FrequencyComboBox.Text = obj.frekvens.ToString();
                         NameTextBox.Text = obj.Name;
                     }
                 }
-
-
             }
         }
-
     }
 }
