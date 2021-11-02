@@ -298,7 +298,7 @@ namespace RSSReader
             // Column3
             // 
             this.Column3.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.Column3.HeaderText = "Frequency(ms)";
+            this.Column3.HeaderText = "Frequency(m)";
             this.Column3.MinimumWidth = 6;
             this.Column3.Name = "Column3";
             this.Column3.ReadOnly = true;
